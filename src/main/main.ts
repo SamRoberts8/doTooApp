@@ -71,8 +71,10 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    width: 400,
+    height: 450,
+    frame: false,
+    resizable: false,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: app.isPackaged
@@ -82,6 +84,7 @@ const createWindow = async () => {
   });
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
+  mainWindow.setAlwaysOnTop(true, 'status');
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
