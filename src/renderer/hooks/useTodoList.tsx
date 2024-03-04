@@ -1,17 +1,11 @@
 import { useState, useEffect } from 'react';
+import { Todo } from '../types';
 
 // Define the structure of a todo item
-interface TodoItem {
-  id: number;
-  title: string;
-  description: string;
-  completed: boolean;
-  sorted: boolean;
-}
 
 // Custom hook for managing a todo list
-function useTodoList(initialTodos: TodoItem[] = []) {
-  const [todos, setTodos] = useState<TodoItem[]>(initialTodos);
+function useTodoList(initialTodos: Todo[] = []) {
+  const [todos, setTodos] = useState<Todo[]>(initialTodos);
 
   // Load todos from local storage on component mount
   useEffect(() => {
@@ -28,14 +22,16 @@ function useTodoList(initialTodos: TodoItem[] = []) {
 
   // Function to add a new todo
   const addTodo = (title: string) => {
-    const newTodo: TodoItem = {
+    const newTodo: Todo = {
       id: todos.length + 1, // This is a simple ID assignment strategy, consider using a more robust method
       title,
       description: 'This is a description',
       completed: false,
       sorted: false,
+      createdAt: new Date(),
+      completedAt: undefined,
     };
-    setTodos([...todos, newTodo]);
+    setTodos([newTodo, ...todos]);
   };
 
   // Function to toggle the completed status of a todo
@@ -43,6 +39,9 @@ function useTodoList(initialTodos: TodoItem[] = []) {
     setTodos(
       todos.map((todo) => {
         if (todo.id === id) {
+          if (todo.completed) {
+            return { ...todo, completed: false, completedAt: new Date() };
+          }
           return { ...todo, completed: !todo.completed };
         }
         return todo;
