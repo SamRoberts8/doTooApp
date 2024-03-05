@@ -7,7 +7,15 @@ import TodoSection from './TodoSection';
 import SortSection from './SortSection'; // Import the new component
 
 function Home() {
-  const { todos, addTodo, toggleTodo, updateTodo, deleteTodo } = useTodoList();
+  const {
+    todos,
+    comparingTodo,
+    addTodo,
+    toggleTodo,
+    updateTodo,
+    deleteTodo,
+    handleSortClick,
+  } = useTodoList();
   const [mode, setMode] = useState('view'); // 'view' or 'sort'
 
   const handleModeSwitch = () => {
@@ -18,12 +26,20 @@ function Home() {
     <div className="overflow-visible">
       <div className="sticky top-0 bg-white pb-2">
         <NavBar />
-        <div className=" h-full mx-8 ">
-          <h1 className=" text-2xl font-bold">doToo List</h1>
-          <h2 className="text-gray-400">Your relative todo list.</h2>
-          <button onClick={handleModeSwitch} type="button">
-            Switch to {mode === 'view' ? 'Sort' : 'View'} Mode
-          </button>
+        <div className=" h-full mx-8 flex justify-between mr-14">
+          <div>
+            <h1 className=" text-2xl font-bold">doToo List</h1>
+            <h2 className="text-gray-400">Your relative todo list.</h2>
+          </div>
+          <div className="flex items-center">
+            <button
+              className="h-10 px-4 py-1 text-sm border border-gray-600 text-gray-900 rounded-md"
+              onClick={handleModeSwitch}
+              type="button"
+            >
+              {mode === 'view' ? 'Sort' : 'View'} Tasks
+            </button>
+          </div>
         </div>
       </div>
 
@@ -37,10 +53,10 @@ function Home() {
         />
       ) : (
         <SortSection
-          sortedTodos={sortedTodos}
-          toggleTodo={toggleTodo}
-          updateTodo={updateTodo}
-          deleteTodo={deleteTodo}
+          todos={todos}
+          sortingTodo={todos[0]}
+          comparingTodo={comparingTodo}
+          handleSortClick={handleSortClick}
         />
       )}
     </div>

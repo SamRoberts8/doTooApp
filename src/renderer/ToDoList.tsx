@@ -6,6 +6,8 @@ import { Todo } from './types';
 interface ToDoListProps {
   todos: Todo[];
   toggleTodo: (id: number) => void;
+  updateTodo: (id: number, newTask: string) => void;
+  deleteTodo: (id: number) => void;
 }
 
 function ToDoList({ todos, toggleTodo }: ToDoListProps) {
