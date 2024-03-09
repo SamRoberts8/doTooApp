@@ -15,8 +15,11 @@ function Home() {
     updateTodo,
     deleteTodo,
     handleSortClick,
+    mode,
+    setMode,
+    sortIndividualTodo,
+    sortingTodo,
   } = useTodoList();
-  const [mode, setMode] = useState('view'); // 'view' or 'sort'
 
   const handleModeSwitch = () => {
     setMode((prevMode) => (prevMode === 'view' ? 'sort' : 'view'));
@@ -43,22 +46,28 @@ function Home() {
         </div>
       </div>
 
-      {mode === 'view' ? (
-        <TodoSection
-          todos={todos}
-          addTodo={addTodo}
-          toggleTodo={toggleTodo}
-          updateTodo={updateTodo}
-          deleteTodo={deleteTodo}
-        />
+      <SortSection
+        todos={todos}
+        sortingTodo={sortingTodo}
+        comparingTodo={comparingTodo}
+        handleSortClick={handleSortClick}
+        setMode={setMode}
+      />
+
+      <TodoSection
+        todos={todos}
+        addTodo={addTodo}
+        toggleTodo={toggleTodo}
+        updateTodo={updateTodo}
+        deleteTodo={deleteTodo}
+        sortIndividualTodo={sortIndividualTodo}
+      />
+
+      {/* {mode === 'view' ? (
+ 
       ) : (
-        <SortSection
-          todos={todos}
-          sortingTodo={todos[0]}
-          comparingTodo={comparingTodo}
-          handleSortClick={handleSortClick}
-        />
-      )}
+
+      )} */}
     </div>
   );
 }

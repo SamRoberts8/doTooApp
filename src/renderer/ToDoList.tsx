@@ -8,9 +8,10 @@ interface ToDoListProps {
   toggleTodo: (id: number) => void;
   updateTodo: (id: number, newTask: string) => void;
   deleteTodo: (id: number) => void;
+  sortIndividualTodo: (todoToSort: Todo) => void;
 }
 
-function ToDoList({ todos, toggleTodo }: ToDoListProps) {
+function ToDoList({ todos, toggleTodo, sortIndividualTodo }: ToDoListProps) {
   return (
     <div className="m-8">
       <ul>
@@ -29,6 +30,13 @@ function ToDoList({ todos, toggleTodo }: ToDoListProps) {
                   <p className="font-bold text-gray-800">{todo.title}</p>
                   <p className="text-gray-400 text-sm">{todo.description}</p>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => sortIndividualTodo(todo)}
+                  className="text-red-500"
+                >
+                  Sort
+                </button>
               </div>
             </li>
           );

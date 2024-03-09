@@ -4,10 +4,11 @@ import React from 'react';
 import { Todo } from './types'; // Reuse the Todo type
 
 interface SortSectionProps {
-  sortingTodo: Todo;
+  sortingTodo: Todo | undefined;
   todos: Todo[];
   comparingTodo: Todo | undefined;
-  handleSortClick: (soonerOrLater: string) => void;
+  handleSortClick: (beforeOrAfter: string) => void;
+  setMode: (mode: string) => void;
 }
 
 const SortSection: React.FC<SortSectionProps> = ({
@@ -16,7 +17,7 @@ const SortSection: React.FC<SortSectionProps> = ({
   comparingTodo,
   handleSortClick,
 }) => {
-  if (!comparingTodo) {
+  if (!comparingTodo || !sortingTodo) {
     return <p>Nothing to compare</p>;
   }
 
@@ -29,7 +30,7 @@ const SortSection: React.FC<SortSectionProps> = ({
         </p>
       </div>
       <div className="my-4">
-        <p className="text-sm text-gray-400">Do later or sooner than...</p>
+        <p className="text-sm text-gray-400">Do after or before than...</p>
         <p className="text-lg font-semibold text-gray-900">
           {comparingTodo.title}
         </p>
@@ -38,16 +39,16 @@ const SortSection: React.FC<SortSectionProps> = ({
         <button
           className="w-full px-4 py-3 border border-gray-600 text-gray-900 rounded-md flex-grow"
           type="button"
-          onClick={() => handleSortClick('later')}
+          onClick={() => handleSortClick('after')}
         >
-          Later
+          After
         </button>
         <button
           className="w-full px-4 py-3 bg-gray-900 text-white rounded-md flex-grow"
           type="button"
-          onClick={() => handleSortClick('sooner')}
+          onClick={() => handleSortClick('before')}
         >
-          Sooner
+          Before
         </button>
       </div>
     </div>

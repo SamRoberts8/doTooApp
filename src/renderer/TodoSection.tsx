@@ -11,6 +11,7 @@ interface TodoSectionProps {
   toggleTodo: (id: number) => void;
   updateTodo: (id: number, newTask: string) => void;
   deleteTodo: (id: number) => void;
+  sortIndividualTodo: (todoToSort: Todo) => void;
 }
 
 const TodoSection: React.FC<TodoSectionProps> = ({
@@ -19,6 +20,7 @@ const TodoSection: React.FC<TodoSectionProps> = ({
   toggleTodo,
   updateTodo,
   deleteTodo,
+  sortIndividualTodo,
 }) => {
   return (
     <>
@@ -27,6 +29,7 @@ const TodoSection: React.FC<TodoSectionProps> = ({
         updateTodo={updateTodo}
         deleteTodo={deleteTodo}
         toggleTodo={toggleTodo}
+        sortIndividualTodo={sortIndividualTodo}
       />
       <div className="my-4  mx-8 border-b  border-gray-200" />
       <AddTaskButton addTodo={addTodo} />
