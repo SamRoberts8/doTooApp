@@ -101,10 +101,12 @@ function useTodoList(initialTodos: Todo[] = []) {
     if (sortingIndex < 0 || targetIndex < 0) return;
 
     if (doBeforeOrAfter === 'before' && targetIndex < sortingIndex) {
+      sortingTodo.sorted = true;
       updatedTodos.splice(sortingIndex, 1);
       updatedTodos.splice(targetIndex - 2, 0, sortingTodo);
       setComparingTodo(undefined);
     } else if (doBeforeOrAfter === 'before') {
+      sortingTodo.sorted = true;
       updatedTodos.splice(sortingIndex, 1);
       updatedTodos.splice(targetIndex - 1, 0, sortingTodo);
       setComparingTodo(undefined);
@@ -118,14 +120,23 @@ function useTodoList(initialTodos: Todo[] = []) {
           ? updatedTodos[targetIndex + 2]
           : undefined,
       );
+
+      if (updatedTodos.length === targetIndex + 1) {
+        updatedTodos[targetIndex].sorted = true;
+      }
     } else {
       updatedTodos.splice(sortingIndex, 1);
       updatedTodos.splice(targetIndex, 0, sortingTodo);
+
       setComparingTodo(
         updatedTodos.length >= targetIndex
           ? updatedTodos[targetIndex + 1]
           : undefined,
       );
+
+      if (updatedTodos.length === targetIndex + 1) {
+        updatedTodos[targetIndex].sorted = true;
+      }
     }
     setdoBeforeOrAfter(undefined);
     setTodos(updatedTodos);

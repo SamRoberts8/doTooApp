@@ -35,7 +35,7 @@ function ToDoList({ todos, toggleTodo, sortIndividualTodo }: ToDoListProps) {
                   onClick={() => sortIndividualTodo(todo)}
                   className="text-red-500"
                 >
-                  Sort
+                  Sort (currently {todo.sorted ? 'sorted' : 'unsorted'})
                 </button>
               </div>
             </li>
