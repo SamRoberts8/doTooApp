@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Todo } from '../types';
-import { todo } from 'node:test';
 
 // Define the structure of a todo item
 
@@ -8,8 +7,7 @@ import { todo } from 'node:test';
 function useTodoList(initialTodos: Todo[] = []) {
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
   const [completedTodos, setCompletedTodos] = useState<Todo[]>(initialTodos);
-  const [doBeforeThanTodo, setdoBeforeThanTodo] = useState<Todo>();
-  const [doAfterThanTodo, setdoAfterThanTodo] = useState<Todo>();
+  const [doBeforeOrAfter, setdoBeforeOrAfter] = useState<String>();
   const [comparingTodo, setComparingTodo] = useState<Todo>();
   const [comparedTodos, setComparedTodos] = useState<Todo[]>([]);
   const [mode, setMode] = useState('view'); // 'view' or 'sort'
@@ -91,47 +89,47 @@ function useTodoList(initialTodos: Todo[] = []) {
   };
 
   const sortTodo = useCallback(() => {
-    if (sortingTodo === undefined) {
-      return;
-    }
+    if (!sortingTodo || doBeforeOrAfter === undefined) return;
 
-    const doAfterThanTodoIndex = todos.findIndex(
-      (t) => t.id === doAfterThanTodo?.id,
+    const updatedTodos = [...todos];
+
+    const sortingIndex = updatedTodos.findIndex((todo) => todo === sortingTodo);
+    const targetIndex = updatedTodos.findIndex(
+      (todo) => todo === comparingTodo,
     );
 
-    if (todos[doAfterThanTodoIndex + 1] === undefined) {
-      const newTodos = [
-        ...todos.filter((t) => t.id !== sortingTodo.id),
-        sortingTodo,
-      ];
-      setTodos(newTodos);
-      setMode('view');
-      return;
-    }
+    if (sortingIndex < 0 || targetIndex < 0) return;
 
-    if (todos[0] === doBeforeThanTodo) {
-      const newTodos = [
-        sortingTodo,
-        ...todos.filter((t) => t.id !== sortingTodo.id),
-      ];
-      setTodos(newTodos);
-    }
+    if (doBeforeOrAfter === 'before' && targetIndex < sortingIndex) {
+      updatedTodos.splice(sortingIndex, 1);
+      updatedTodos.splice(targetIndex - 2, 0, sortingTodo);
+      setComparingTodo(undefined);
+    } else if (doBeforeOrAfter === 'before') {
+      updatedTodos.splice(sortingIndex, 1);
+      updatedTodos.splice(targetIndex - 1, 0, sortingTodo);
+      setComparingTodo(undefined);
+    } else if (targetIndex < sortingIndex) {
+      updatedTodos.splice(sortingIndex, 1);
 
-    if (doAfterThanTodo !== undefined) {
-      const filteredTodos = todos.filter((t) => t.id !== sortingTodo.id);
-      console.log('Filtered todos', filteredTodos);
-      filteredTodos.splice(doAfterThanTodoIndex, 0, sortingTodo);
-      console.log('new todos', filteredTodos);
-      setTodos(filteredTodos);
-    }
+      updatedTodos.splice(targetIndex + 1, 0, sortingTodo);
 
-    if (comparingTodo) {
-      setComparedTodos([comparingTodo, ...comparedTodos]);
+      setComparingTodo(
+        updatedTodos.length >= targetIndex
+          ? updatedTodos[targetIndex + 2]
+          : undefined,
+      );
+    } else {
+      updatedTodos.splice(sortingIndex, 1);
+      updatedTodos.splice(targetIndex, 0, sortingTodo);
+      setComparingTodo(
+        updatedTodos.length >= targetIndex
+          ? updatedTodos[targetIndex + 1]
+          : undefined,
+      );
     }
-
-    setdoBeforeThanTodo(undefined);
-    setdoAfterThanTodo(undefined);
-  }, [sortingTodo, todos, doBeforeThanTodo, doAfterThanTodo]);
+    setdoBeforeOrAfter(undefined);
+    setTodos(updatedTodos);
+  }, [sortingTodo, doBeforeOrAfter, todos, comparingTodo]);
 
   const handleSortClick = (beforeOrAfter: string) => {
     if (comparingTodo === undefined) {
@@ -139,45 +137,25 @@ function useTodoList(initialTodos: Todo[] = []) {
     }
 
     if (beforeOrAfter === 'before') {
-      setdoBeforeThanTodo(comparingTodo);
+      setdoBeforeOrAfter('before');
     } else {
-      console.log('Do after than', comparingTodo);
-      setdoAfterThanTodo(comparingTodo);
+      setdoBeforeOrAfter('after');
     }
   };
 
-  // Make a list of comparedTodos so that the compared todo can be highlighted properly.
   useEffect(() => {
-    if (comparedTodos.length === 0 || !comparingTodo) {
-      return;
-    }
-    const nextToCompareIndex =
-      todos.findIndex((t) => t.id === comparingTodo.id) + 1;
-
-    const nextToCompareTodo = todos[nextToCompareIndex];
-
-    if (comparedTodos.some((t) => t.id === nextToCompareTodo?.id)) {
-      console.log('Next to compare', nextToCompareTodo);
-      setComparingTodo(undefined);
-      setMode('view');
-    } else {
-      setComparingTodo(nextToCompareTodo);
-    }
-  }, [comparedTodos, comparingTodo, todos]);
-
-  useEffect(() => {
-    if (doBeforeThanTodo !== undefined || doAfterThanTodo !== undefined) {
-      sortTodo();
-    }
-  }, [doBeforeThanTodo, doAfterThanTodo, sortTodo]);
+    sortTodo();
+  }, [sortingTodo, doBeforeOrAfter, sortTodo]);
 
   const sortIndividualTodo = (todoToSort: Todo) => {
     setSortingTodo(todoToSort);
+
     if (todoToSort === todos[0]) {
       setComparingTodo(todos[1]);
     } else {
       setComparingTodo(todos[0]);
     }
+
     setMode('sort');
   };
 
