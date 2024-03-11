@@ -29,9 +29,9 @@ const SortSection: React.FC<SortSectionProps> = ({
           {sortingTodo.title}
         </p>
       </div>
-      <div className="my-4">
+      <div className="my-4 w-80 break-all">
         <p className="text-sm text-gray-400">Do after or before than...</p>
-        <p className="text-lg font-semibold text-gray-900">
+        <p className="text-lg font-semibold text-gray-900 ">
           {comparingTodo.title}
         </p>
       </div>

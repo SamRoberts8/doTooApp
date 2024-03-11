@@ -9,7 +9,6 @@ function useTodoList(initialTodos: Todo[] = []) {
   const [completedTodos, setCompletedTodos] = useState<Todo[]>(initialTodos);
   const [doBeforeOrAfter, setdoBeforeOrAfter] = useState<String>();
   const [comparingTodo, setComparingTodo] = useState<Todo>();
-  const [comparedTodos, setComparedTodos] = useState<Todo[]>([]);
   const [mode, setMode] = useState('view'); // 'view' or 'sort'
   const [sortingTodo, setSortingTodo] = useState<Todo>();
 
@@ -105,11 +104,13 @@ function useTodoList(initialTodos: Todo[] = []) {
       updatedTodos.splice(sortingIndex, 1);
       updatedTodos.splice(targetIndex - 2, 0, sortingTodo);
       setComparingTodo(undefined);
+      setMode('view');
     } else if (doBeforeOrAfter === 'before') {
       sortingTodo.sorted = true;
       updatedTodos.splice(sortingIndex, 1);
       updatedTodos.splice(targetIndex - 1, 0, sortingTodo);
       setComparingTodo(undefined);
+      setMode('view');
     } else if (targetIndex < sortingIndex) {
       updatedTodos.splice(sortingIndex, 1);
 
@@ -123,6 +124,7 @@ function useTodoList(initialTodos: Todo[] = []) {
 
       if (updatedTodos.length === targetIndex + 1) {
         updatedTodos[targetIndex].sorted = true;
+        setMode('view');
       }
     } else {
       updatedTodos.splice(sortingIndex, 1);
@@ -136,6 +138,7 @@ function useTodoList(initialTodos: Todo[] = []) {
 
       if (updatedTodos.length === targetIndex + 1) {
         updatedTodos[targetIndex].sorted = true;
+        setMode('view');
       }
     }
     setdoBeforeOrAfter(undefined);
@@ -160,6 +163,14 @@ function useTodoList(initialTodos: Todo[] = []) {
 
   const sortIndividualTodo = (todoToSort: Todo) => {
     setSortingTodo(todoToSort);
+
+    const todoToSortIndex = todos.findIndex((todo) => todo === todoToSort);
+
+    if (todoToSort.sorted) {
+      const updatedTodos = [...todos];
+      updatedTodos[todoToSortIndex].sorted = false;
+      setTodos(updatedTodos);
+    }
 
     if (todoToSort === todos[0]) {
       setComparingTodo(todos[1]);

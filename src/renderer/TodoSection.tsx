@@ -31,7 +31,7 @@ const TodoSection: React.FC<TodoSectionProps> = ({
         toggleTodo={toggleTodo}
         sortIndividualTodo={sortIndividualTodo}
       />
-      <div className="my-4  mx-8 border-b  border-gray-200" />
+
       <AddTaskButton addTodo={addTodo} />
     </>
   );

@@ -150,6 +150,7 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "mini-css-extract-plugin": "^2.7.6",
+    "postcss-loader": "^8.1.1",
     "prettier": "^3.0.3",
     "react-refresh": "^0.14.0",
     "react-test-renderer": "^18.2.0",
@@ -171,8 +172,8 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "doToo List",
+    "appId": "org.erb.doTooList",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [

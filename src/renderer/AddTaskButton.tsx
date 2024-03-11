@@ -34,7 +34,7 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
 
   if (isInputVisible) {
     return (
-      <div className="my-4 mx-7 p-1 flex flex-col gap-4 items-center rounded-md">
+      <div className="mt-4  mx-7 pt-4 pb-6 flex flex-col gap-4 items-center rounded-md sticky bottom-0 right-0 bg-white">
         <input
           className="rounded-md w-full p-1 outline-none"
           type="text"
@@ -69,23 +69,25 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
   }
 
   return (
-    <div
-      className="my-4 mx-7 p-1 flex gap-4 items-center cursor-pointer hover:bg-gray-50 rounded-md"
-      onClick={handleButtonClick}
-      role="button"
-      tabIndex={0}
-      aria-label="Add new todo"
-      onKeyDown={(event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          handleButtonClick();
-        }
-      }}
-    >
-      <div>
-        <PlusIcon />
-      </div>
-      <div>
-        <p className="text-sm text-gray-600">Add task</p>
+    <div className="  sticky bottom-0 right-0 z-10 bg-white  border-t  border-gray-100">
+      <div
+        className=" mx-7 p-4 flex gap-4 items-center cursor-pointer hover:bg-gray-50 rounded-md"
+        onClick={handleButtonClick}
+        role="button"
+        tabIndex={0}
+        aria-label="Add new todo"
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            handleButtonClick();
+          }
+        }}
+      >
+        <div>
+          <PlusIcon />
+        </div>
+        <div>
+          <p className="text-sm text-gray-600">Add task</p>
+        </div>
       </div>
     </div>
   );
