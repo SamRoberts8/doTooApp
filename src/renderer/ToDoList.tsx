@@ -15,7 +15,7 @@ function ToDoList({ todos, toggleTodo, sortIndividualTodo }: ToDoListProps) {
   const lastTodo = todos[todosLength - 1];
 
   return (
-    <div className="mx-8 my-6">
+    <div className="mx-8 my-6 max-h-64 overflow-auto">
       <ul>
         {todos.map((todo) => {
           if (todo.completed) {
@@ -52,7 +52,7 @@ function ToDoList({ todos, toggleTodo, sortIndividualTodo }: ToDoListProps) {
               {todo === lastTodo ? (
                 ''
               ) : (
-                <div className="mt-2 mb-4  border-b  border-gray-200" />
+                <div className="mt-2 mb-4  border-b  border-gray-300" />
               )}
             </li>
           );

@@ -75,7 +75,13 @@ const createWindow = async () => {
     height: 450,
     frame: false,
     resizable: false,
+    transparent: true,
+    // hasShadow: false,
     icon: getAssetPath('icon.png'),
+    vibrancy: 'hud',
+    visualEffectState: 'active',
+    titleBarStyle: 'hiddenInset',
+
     webPreferences: {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')

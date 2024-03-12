@@ -21,8 +21,8 @@ function Home() {
   } = useTodoList();
 
   return (
-    <div className="overflow-visible select-none ">
-      <div className="sticky top-0 bg-white z-10 pb-2">
+    <div className="overflow-visible select-none h-screen  ">
+      <div className="sticky top-0  z-10 pb-2">
         <NavBar />
         <div className=" h-full mx-8 flex justify-between mr-14 ">
           <div>
