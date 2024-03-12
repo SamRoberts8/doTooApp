@@ -6,7 +6,7 @@ import AlertIcon from './icons/AlertIcon';
 
 interface ToDoListProps {
   todos: Todo[];
-  toggleTodo: (id: number) => void;
+  toggleTodo: (id: string) => void;
   sortIndividualTodo: (todoToSort: Todo) => void;
 }
 
@@ -31,7 +31,7 @@ function ToDoList({ todos, toggleTodo, sortIndividualTodo }: ToDoListProps) {
                       onClick={() => toggleTodo(todo.id)}
                     />
                     <div className="flex flex-col w-56">
-                      <p className="font-bold text-gray-800 break-all">
+                      <p className="font-bold text-gray-800 break-words">
                         {todo.title}
                       </p>
                       <p className="text-gray-400 text-sm break-words">

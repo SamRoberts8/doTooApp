@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { Todo } from '../types';
 
 // Define the structure of a todo item
@@ -34,7 +35,7 @@ function useTodoList(initialTodos: Todo[] = []) {
   // Function to add a new todo
   const addTodo = (title: string) => {
     const newTodo: Todo = {
-      id: todos.length + 1, // This is a simple ID assignment strategy, consider using a more robust method
+      id: uuidv4(),
       title,
       description: 'This is a description',
       completed: false,
@@ -47,8 +48,10 @@ function useTodoList(initialTodos: Todo[] = []) {
 
   // Function to toggle the completed status of a todo
   const toggleTodo = (id: number) => {
+    console.log('toggleTodo');
+    const updatedTodos = [...todos];
     setTodos(
-      todos
+      updatedTodos
         .map((todo) => {
           if (todo.id === id) {
             const updatedTodo = { ...todo, completed: !todo.completed };
@@ -74,7 +77,7 @@ function useTodoList(initialTodos: Todo[] = []) {
   const updateTodo = (id: number, newText: string) => {
     setTodos(
       todos.map((todo) => {
-        if (todo.id === id) {
+        if (todo.id === id.toString()) {
           return { ...todo, text: newText };
         }
         return todo;
@@ -84,7 +87,7 @@ function useTodoList(initialTodos: Todo[] = []) {
 
   // Function to delete a todo
   const deleteTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    setTodos(todos.filter((todo) => todo.id !== id.toString()));
   };
 
   const sortTodo = useCallback(() => {
