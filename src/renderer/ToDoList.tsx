@@ -27,15 +27,12 @@ function ToDoList({ todos, toggleTodo, sortIndividualTodo }: ToDoListProps) {
                 <div className="flex items-center justify-between my- gap-4 relative ">
                   <div className="flex gap-4 items-center">
                     <div
-                      className="border-gray-400 border w-5 h-5 flex-shrink-0 rounded-full hover:bg-green-700 cursor-pointer"
+                      className="border-gray-800 border w-5 h-5 flex-shrink-0 rounded-full hover:bg-green-700 cursor-pointer"
                       onClick={() => toggleTodo(todo.id)}
                     />
                     <div className="flex flex-col w-56">
-                      <p className="font-bold text-gray-800 break-words">
+                      <p className="font-medium text-gray-800 break-words">
                         {todo.title}
-                      </p>
-                      <p className="text-gray-400 text-sm break-words">
-                        {todo.description}
                       </p>
                     </div>
                   </div>
@@ -52,7 +49,7 @@ function ToDoList({ todos, toggleTodo, sortIndividualTodo }: ToDoListProps) {
               {todo === lastTodo ? (
                 ''
               ) : (
-                <div className="mt-2 mb-4  border-b  border-gray-300" />
+                <div className="mt-2 mb-4  border-b  border-gray-800 opacity-10" />
               )}
             </li>
           );

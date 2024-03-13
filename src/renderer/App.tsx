@@ -27,7 +27,9 @@ function Home() {
         <div className=" h-full mx-8 flex justify-between mr-14 ">
           <div>
             <h1 className=" text-2xl font-bold">doToo List</h1>
-            <h2 className="text-gray-400">Your relative todo list.</h2>
+            <h2 className="text-gray-800 opacity-40">
+              Your relative todo list.
+            </h2>
           </div>
         </div>
       </div>

@@ -36,7 +36,7 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
     return (
       <div className="mt-4  mx-7 pt-4 pb-6 flex flex-col gap-4 items-center rounded-md sticky bottom-0 right-0">
         <input
-          className="rounded-md text-gray-900 w-full bg-gray-100 p-3 outline-none"
+          className="rounded-md text-gray-900 w-full  border-gray-800 bg-opacity-30 p-3 outline-none"
           type="text"
           value={inputValue}
           onChange={handleInputChange}
@@ -69,10 +69,10 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
   }
 
   return (
-    <div className="sticky bottom-0 w-screen  z-10  border-t  border-gray-300">
+    <div className="sticky bottom-0 w-screen  z-10  border-t  border-gray-800 border-opacity-10 ">
       <div className="p-2">
         <div
-          className=" mx-7 p-2 flex gap-4 items-center cursor-pointer hover:bg-gray-200 rounded-md"
+          className=" mx-7 p-2 flex gap-4 items-center cursor-pointer hover:bg-gray-800 hover:bg-opacity-10 rounded-md"
           onClick={handleButtonClick}
           role="button"
           tabIndex={0}
