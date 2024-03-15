@@ -4,6 +4,7 @@ import NavBar from './NavBar';
 import './App.css';
 import TodoSection from './TodoSection';
 import SortSection from './SortSection';
+import ListTitle from '../components/ui/ListTitle.tsx';
 
 function Home() {
   const {
@@ -24,13 +25,8 @@ function Home() {
     <div className="overflow-visible select-none h-screen  ">
       <div className="sticky top-0  z-10 pb-2">
         <NavBar />
-        <div className=" h-full mx-8 flex justify-between mr-14 ">
-          <div>
-            <h1 className=" text-2xl font-bold">doToo List</h1>
-            <h2 className="text-gray-800 opacity-40">
-              Your relative todo list.
-            </h2>
-          </div>
+        <div className=" h-full mx-8 flex  mr-14 ">
+          <ListTitle />
         </div>
       </div>
 

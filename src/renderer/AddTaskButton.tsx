@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 /* eslint-disable react/function-component-definition */
 import React, { useState } from 'react';
-import PlusIcon from './PlusIcon';
+
+import { CirclePlus } from 'lucide-react';
 
 interface AddTaskButtonProps {
   addTodo: (todo: string) => void;
@@ -72,7 +73,7 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
     <div className="sticky bottom-0 w-screen  z-10  border-t  border-gray-800 border-opacity-10 ">
       <div className="p-2">
         <div
-          className=" mx-7 p-2 flex gap-4 items-center cursor-pointer hover:bg-gray-800 hover:bg-opacity-10 rounded-md"
+          className=" mx-7 p-2 flex gap-4 items-center cursor-pointer rounded-md"
           onClick={handleButtonClick}
           role="button"
           tabIndex={0}
@@ -84,7 +85,7 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
           }}
         >
           <div>
-            <PlusIcon />
+            <CirclePlus color="#374151" />
           </div>
           <div>
             <p className="text-sm text-gray-600">Add task</p>
