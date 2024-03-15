@@ -8,6 +8,10 @@ import ListTitle from '../components/ui/ListTitle.tsx';
 
 function Home() {
   const {
+    todoLists,
+    cleanTodoListNames,
+    listName,
+    setListName,
     todos,
     comparingTodo,
     addTodo,
@@ -26,7 +30,12 @@ function Home() {
       <div className="sticky top-0  z-10 pb-2">
         <NavBar />
         <div className=" h-full mx-8 flex  mr-14 ">
-          <ListTitle />
+          <ListTitle
+            todoLists={todoLists}
+            cleanTodoListNames={cleanTodoListNames}
+            listName={listName}
+            setListName={setListName}
+          />
         </div>
       </div>
 

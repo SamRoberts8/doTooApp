@@ -3,34 +3,58 @@ import { v4 as uuidv4 } from 'uuid';
 import { Todo } from '../types';
 
 // Define the structure of a todo item
-
-// Custom hook for managing a todo list
 function useTodoList(initialTodos: Todo[] = []) {
+  const [todoLists, setTodoLists] = useState<string[]>(['doToo List']);
+  const [cleanTodoListNames, setCleanTodoListNames] = useState<string[]>([]);
+  const [listName, setListName] = useState<string>('doToo List');
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
   const [completedTodos, setCompletedTodos] = useState<Todo[]>(initialTodos);
-  const [doBeforeOrAfter, setdoBeforeOrAfter] = useState<String>();
+  const [doBeforeOrAfter, setDoBeforeOrAfter] = useState<string>();
   const [comparingTodo, setComparingTodo] = useState<Todo>();
   const [mode, setMode] = useState('view'); // 'view' or 'sort'
   const [sortingTodo, setSortingTodo] = useState<Todo>();
+  const [todosKey, setTodosKey] = useState<string>('todos_doToo List');
+  const [completedTodosKey, setCompletedTodosKey] = useState<string>(
+    'completedTodos_doToo List',
+  );
+
+  useEffect(() => {
+    // Update the todos and completedTodos keys whenever the listName changes
+    if (listName) {
+      setTodosKey(`todos_${listName}`);
+      setCompletedTodosKey(`completedTodos_${listName}`);
+    }
+  }, [listName]);
+
+  useEffect(() => {
+    const keys = Object.keys(localStorage);
+    const todoListKeys = keys.filter((key) => key.includes('todos'));
+    setTodoLists(todoListKeys);
+
+    const cleanedTodoListNames = todoListKeys.map((key) =>
+      key.replace('todos_', ''),
+    );
+    setCleanTodoListNames(cleanedTodoListNames);
+  }, [listName]);
 
   // Load todos from local storage on component mount
   useEffect(() => {
-    const storedTodos = localStorage.getItem('todos');
+    const storedTodos = localStorage.getItem(todosKey);
     if (storedTodos) {
       setTodos(JSON.parse(storedTodos));
     }
 
-    const storedCompletedTodos = localStorage.getItem('completedTodos');
+    const storedCompletedTodos = localStorage.getItem(completedTodosKey);
     if (storedCompletedTodos) {
       setCompletedTodos(JSON.parse(storedCompletedTodos));
     }
-  }, []);
+  }, [completedTodosKey, listName, todosKey]);
 
   // Save todos to local storage whenever todos change
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-    localStorage.setItem('completedTodos', JSON.stringify(completedTodos));
-  }, [todos, completedTodos]);
+    localStorage.setItem(todosKey, JSON.stringify(todos));
+    localStorage.setItem(completedTodosKey, JSON.stringify(completedTodos));
+  }, [todos, completedTodos, todosKey, completedTodosKey]);
 
   // Function to add a new todo
   const addTodo = (title: string) => {
@@ -185,6 +209,10 @@ function useTodoList(initialTodos: Todo[] = []) {
   };
 
   return {
+    todoLists,
+    cleanTodoListNames,
+    listName,
+    setListName,
     todos,
     comparingTodo,
     addTodo,
