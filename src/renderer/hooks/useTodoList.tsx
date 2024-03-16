@@ -1,60 +1,84 @@
 import { useState, useEffect, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Todo } from '../types';
+import { Todo, TodoList } from '../types';
 
 // Define the structure of a todo item
 function useTodoList(initialTodos: Todo[] = []) {
-  const [todoLists, setTodoLists] = useState<string[]>(['doToo List']);
-  const [cleanTodoListNames, setCleanTodoListNames] = useState<string[]>([]);
-  const [listName, setListName] = useState<string>('doToo List');
+  const [todoLists, setTodoLists] = useState<TodoList[]>([]);
+  const [currentListId, setCurrentListId] = useState<string>('');
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
   const [completedTodos, setCompletedTodos] = useState<Todo[]>(initialTodos);
   const [doBeforeOrAfter, setDoBeforeOrAfter] = useState<string>();
   const [comparingTodo, setComparingTodo] = useState<Todo>();
   const [mode, setMode] = useState('view'); // 'view' or 'sort'
   const [sortingTodo, setSortingTodo] = useState<Todo>();
-  const [todosKey, setTodosKey] = useState<string>('todos_doToo List');
-  const [completedTodosKey, setCompletedTodosKey] = useState<string>(
-    'completedTodos_doToo List',
-  );
+
+  const storageKey = 'todoListsStorage';
+
+  const changeActiveList = (id: string) => {
+    setCurrentListId(id);
+  };
+
+  const addTodoListAndSetActive = (name: string) => {
+    const newListId = uuidv4(); // Generate the new list ID
+    const newList = {
+      id: newListId,
+      name,
+      todos: [],
+      completedTodos: [],
+    };
+
+    // Assuming setTodoLists is a function that updates the state of todo lists
+    setTodoLists((prevLists) => [...prevLists, newList]);
+
+    // Set the newly created list as the active list
+    changeActiveList(newListId);
+  };
 
   useEffect(() => {
-    // Update the todos and completedTodos keys whenever the listName changes
-    if (listName) {
-      setTodosKey(`todos_${listName}`);
-      setCompletedTodosKey(`completedTodos_${listName}`);
+    // Attempt to load todo lists from local storage
+    const storedTodoLists = localStorage.getItem(storageKey);
+    if (storedTodoLists) {
+      const todoListsLocal = JSON.parse(storedTodoLists);
+      setTodoLists(todoListsLocal);
+
+      // If there are existing lists, set the first one as the current list.
+      if (todoListsLocal.length > 0) {
+        setCurrentListId(todoListsLocal[0].id);
+      }
+    } else {
+      const defaultListId = uuidv4();
+      const defaultList = [
+        {
+          id: defaultListId,
+          name: 'doToo List',
+          todos: [],
+          completedTodos: [],
+        },
+      ];
+      localStorage.setItem(storageKey, JSON.stringify(defaultList));
+      setTodoLists(defaultList);
+      setCurrentListId(defaultListId);
     }
-  }, [listName]);
+  }, []); // Note: This effect should truly only run once, hence the empty dependency array.
 
   useEffect(() => {
-    const keys = Object.keys(localStorage);
-    const todoListKeys = keys.filter((key) => key.includes('todos'));
-    setTodoLists(todoListKeys);
+    localStorage.setItem(storageKey, JSON.stringify(todoLists));
+  }, [todoLists, storageKey]);
 
-    const cleanedTodoListNames = todoListKeys.map((key) =>
-      key.replace('todos_', ''),
-    );
-    setCleanTodoListNames(cleanedTodoListNames);
-  }, [listName]);
-
-  // Load todos from local storage on component mount
   useEffect(() => {
-    const storedTodos = localStorage.getItem(todosKey);
-    if (storedTodos) {
-      setTodos(JSON.parse(storedTodos));
+    // Update todos and completedTodos based on currentListId change
+    const currentList = todoLists.find((list) => list.id === currentListId);
+    if (currentList) {
+      setTodos(currentList.todos || []);
+      setCompletedTodos(currentList.completedTodos || []);
     }
+  }, [currentListId, todoLists]);
 
-    const storedCompletedTodos = localStorage.getItem(completedTodosKey);
-    if (storedCompletedTodos) {
-      setCompletedTodos(JSON.parse(storedCompletedTodos));
-    }
-  }, [completedTodosKey, listName, todosKey]);
-
-  // Save todos to local storage whenever todos change
+  // Save todo lists to local storage whenever todoLists change
   useEffect(() => {
-    localStorage.setItem(todosKey, JSON.stringify(todos));
-    localStorage.setItem(completedTodosKey, JSON.stringify(completedTodos));
-  }, [todos, completedTodos, todosKey, completedTodosKey]);
+    localStorage.setItem(storageKey, JSON.stringify(todoLists));
+  }, [todoLists]);
 
   // Function to add a new todo
   const addTodo = (title: string) => {
@@ -67,12 +91,17 @@ function useTodoList(initialTodos: Todo[] = []) {
       createdAt: new Date(),
       completedAt: undefined,
     };
-    setTodos([newTodo, ...todos]);
+    const updatedLists = todoLists.map((list) => {
+      if (list.id === currentListId) {
+        return { ...list, todos: [newTodo, ...list.todos] };
+      }
+      return list;
+    });
+    setTodoLists(updatedLists);
   };
 
   // Function to toggle the completed status of a todo
   const toggleTodo = (id: number) => {
-    console.log('toggleTodo');
     const updatedTodos = [...todos];
     setTodos(
       updatedTodos
@@ -210,12 +239,13 @@ function useTodoList(initialTodos: Todo[] = []) {
 
   return {
     todoLists,
-    cleanTodoListNames,
-    listName,
-    setListName,
+    currentListId,
+    setCurrentListId,
     todos,
-    comparingTodo,
+    changeActiveList,
+    addTodoListAndSetActive,
     addTodo,
+    comparingTodo,
     toggleTodo,
     updateTodo,
     deleteTodo,

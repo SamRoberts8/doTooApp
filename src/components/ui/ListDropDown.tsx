@@ -12,37 +12,44 @@ import {
 } from './command';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 
+import { Todos } from '../types';
+
 interface ListDropDownProps {
   isHovered: boolean;
-  setIsHovered: (isHovered: boolean) => void;
-  cleanTodoListNames: string[];
-  setListName: (listName: string) => void;
-  listName: string;
+  todoLists: Todos[];
+  changeActiveList: (id: string) => void;
+  addTodoListAndSetActive: (name: string) => void;
+  currentListId: string;
 }
 
 // eslint-disable-next-line react/function-component-definition
 const ListDropDown: React.FC<ListDropDownProps> = ({
   isHovered,
-  cleanTodoListNames,
-  setListName,
-  listName,
+  todoLists,
+  changeActiveList,
+  addTodoListAndSetActive,
+  currentListId,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
   const [inputValue, setInputValue] = useState(''); // Track input value
 
+  const currentList = todoLists.find((list) => list.id === currentListId);
+
+  console.log('currentList', currentListId);
+  const listName = currentList ? currentList.name : '';
+
   const createNewList = () => {
-    setListName(inputValue);
+    addTodoListAndSetActive(inputValue);
+    setOpen(false);
+    setInputValue('');
+    setValue('');
   };
 
   useEffect(() => {
     setValue(listName);
   }, [listName]);
-
-  const filteredLists = cleanTodoListNames.filter((list) =>
-    list.toLowerCase().includes(inputValue.toLowerCase()),
-  );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -70,22 +77,24 @@ const ListDropDown: React.FC<ListDropDownProps> = ({
           </CommandEmpty>
           <CommandGroup>
             <CommandList>
-              {filteredLists.length > 0 ? (
-                filteredLists.map((list) => (
+              {todoLists.length > 0 ? (
+                todoLists.map((list) => (
                   <CommandItem
-                    key={list}
-                    value={list}
-                    onSelect={(currentValue) => {
-                      setListName(currentValue);
+                    key={list.id}
+                    value={list.name}
+                    onSelect={() => {
+                      changeActiveList(list.id);
                       setOpen(false);
+                      setInputValue('');
+                      setValue('');
                     }}
                   >
                     <Check
                       className={`mr-2 h-4 w-4 ${
-                        value === list ? 'opacity-100' : 'opacity-0'
+                        value === list.name ? 'opacity-100' : 'opacity-0'
                       }`}
                     />
-                    {list}
+                    {list.name}
                   </CommandItem>
                 ))
               ) : (

@@ -9,9 +9,9 @@ import ListTitle from '../components/ui/ListTitle.tsx';
 function Home() {
   const {
     todoLists,
-    cleanTodoListNames,
-    listName,
-    setListName,
+    changeActiveList,
+    addTodoListAndSetActive,
+    currentListId,
     todos,
     comparingTodo,
     addTodo,
@@ -32,9 +32,9 @@ function Home() {
         <div className=" h-full mx-8 flex  mr-14 ">
           <ListTitle
             todoLists={todoLists}
-            cleanTodoListNames={cleanTodoListNames}
-            listName={listName}
-            setListName={setListName}
+            currentListId={currentListId}
+            changeActiveList={changeActiveList}
+            addTodoListAndSetActive={addTodoListAndSetActive}
           />
         </div>
       </div>

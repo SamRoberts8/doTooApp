@@ -1,8 +1,16 @@
 import { useState } from 'react';
 import ListDropDown from './ListDropDown';
 
-function ListTitle({ todoLists, cleanTodoListNames, listName, setListName }) {
+function ListTitle({
+  todoLists,
+  changeActiveList,
+  addTodoListAndSetActive,
+  currentListId,
+}) {
   const [isHovered, setIsHovered] = useState(false);
+
+  const currentList = todoLists.find((list) => list.id === currentListId);
+  const listName = currentList ? currentList.name : '';
 
   return (
     <div
@@ -17,9 +25,10 @@ function ListTitle({ todoLists, cleanTodoListNames, listName, setListName }) {
       <ListDropDown
         isHovered={isHovered}
         setIsHovered={setIsHovered}
-        cleanTodoListNames={cleanTodoListNames}
-        setListName={setListName}
-        listName={listName}
+        todoLists={todoLists}
+        changeActiveList={changeActiveList}
+        addTodoListAndSetActive={addTodoListAndSetActive}
+        currentListId={currentListId}
       />
     </div>
   );
