@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronDown, Check } from 'lucide-react';
+import { ChevronDown, Check, PlusCircle } from 'lucide-react';
 
 import { Button } from './button';
 import {
@@ -9,7 +9,11 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandSeparator,
 } from './command';
+
+import CardPopUp from './CardPopUp';
+
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 
 import { Todos } from '../types';
@@ -34,10 +38,9 @@ const ListDropDown: React.FC<ListDropDownProps> = ({
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
   const [inputValue, setInputValue] = useState(''); // Track input value
+  const [showCard, setShowCard] = useState(false);
 
   const currentList = todoLists.find((list) => list.id === currentListId);
-
-  console.log('currentList', currentListId);
   const listName = currentList ? currentList.name : '';
 
   const createNewList = () => {
@@ -50,6 +53,15 @@ const ListDropDown: React.FC<ListDropDownProps> = ({
   useEffect(() => {
     setValue(listName);
   }, [listName]);
+
+  if (showCard) {
+    return (
+      <CardPopUp
+        setShowCard={setShowCard}
+        addTodoListAndSetActive={addTodoListAndSetActive}
+      />
+    );
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -64,7 +76,7 @@ const ListDropDown: React.FC<ListDropDownProps> = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
-        <Command>
+        <Command className="  h-full">
           <CommandInput
             placeholder="Search Lists..."
             value={inputValue}
@@ -76,7 +88,7 @@ const ListDropDown: React.FC<ListDropDownProps> = ({
             </button>
           </CommandEmpty>
           <CommandGroup>
-            <CommandList>
+            <CommandList className="max-h-60  overflow-y-auto overflow-x-hidden">
               {todoLists.length > 0 ? (
                 todoLists.map((list) => (
                   <CommandItem
@@ -101,6 +113,17 @@ const ListDropDown: React.FC<ListDropDownProps> = ({
                 <div>No lists found.</div>
               )}
             </CommandList>
+            <CommandSeparator />
+            <CommandItem
+              onSelect={() => {
+                setOpen(false);
+                setShowCard(true);
+              }}
+              className="mt-1"
+            >
+              <PlusCircle className="mr-2 h-4 w-4" />
+              <span>Create New List</span>
+            </CommandItem>
           </CommandGroup>
         </Command>
       </PopoverContent>

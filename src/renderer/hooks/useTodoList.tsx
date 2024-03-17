@@ -197,7 +197,7 @@ function useTodoList(initialTodos: Todo[] = []) {
         setMode('view');
       }
     }
-    setdoBeforeOrAfter(undefined);
+    setDoBeforeOrAfter(undefined);
     setTodos(updatedTodos);
   }, [sortingTodo, doBeforeOrAfter, todos, comparingTodo]);
 
@@ -207,9 +207,9 @@ function useTodoList(initialTodos: Todo[] = []) {
     }
 
     if (beforeOrAfter === 'before') {
-      setdoBeforeOrAfter('before');
+      setDoBeforeOrAfter('before');
     } else {
-      setdoBeforeOrAfter('after');
+      setDoBeforeOrAfter('after');
     }
   };
 
