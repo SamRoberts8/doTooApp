@@ -27,10 +27,10 @@ function Home() {
   } = useTodoList();
 
   return (
-    <div className="overflow-visible select-none h-screen  ">
-      <div className="sticky top-0  z-10 pb-2">
+    <div className="overflow-visible select-none h-screen flex flex-col ">
+      <div className=" z-10 pb-2 flex-grow">
         <NavBar />
-        <div className=" h-full mx-8 flex  mr-14 ">
+        <div className=" mx-8 flex  mr-14 ">
           <ListTitle
             todoLists={todoLists}
             currentListId={currentListId}

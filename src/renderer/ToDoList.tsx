@@ -23,7 +23,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
     <li className="group -z-10">
       <div>
         <div
-          className="flex items-center justify-between my- gap-4 relative "
+          className="flex items-center justify-between  gap-4 relative "
           onMouseEnter={() => setIsHover(true)}
           onMouseLeave={() => setIsHover(false)}
         >
@@ -73,7 +73,7 @@ function ToDoList({ todos, toggleTodo, sortIndividualTodo }: ToDoListProps) {
   const lastTodo = todos[todosLength - 1];
 
   return (
-    <div className="mx-8 my-6 max-h-64 overflow-auto">
+    <div className="mx-8 my-6  overflow-auto flex-shrink">
       <ul>
         {todos.map((todo) =>
           todo.completed ? null : (

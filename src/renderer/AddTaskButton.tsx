@@ -48,7 +48,7 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
 
   if (isInputVisible) {
     return (
-      <div className="mt-4  mx-7 pt-4 pb-6 flex flex-col gap-4 items-center rounded-md sticky bottom-0 right-0">
+      <div className="  mx-7  mb-4 flex flex-col gap-4 items-center rounded-md ">
         <input
           className="rounded-md text-gray-900 w-full  border-gray-800 bg-opacity-30 p-3 outline-none"
           type="text"
@@ -57,6 +57,9 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
           onKeyDown={(event) => {
             if (event.key === 'Enter') {
               handleInputSubmit();
+            }
+            if (event.key === 'Escape') {
+              handleInputCancel();
             }
           }}
           autoFocus
@@ -83,7 +86,7 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
   }
 
   return (
-    <div className="sticky bottom-0 w-screen  z-0  border-t  border-gray-800 border-opacity-10 ">
+    <div className=" w-screen  z-0  border-t  border-gray-800 border-opacity-10  ">
       <div className="p-2">
         <div
           className=" mx-7 p-2 flex gap-4 items-center cursor-pointer rounded-md"

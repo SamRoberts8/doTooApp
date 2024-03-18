@@ -22,7 +22,7 @@ const SortSection: React.FC<SortSectionProps> = ({
   }
 
   return (
-    <div className="my-4  mx-8">
+    <div className="my-4  mx-8 h-[338px] ">
       <div>
         <p className="text-sm text-gray-400">Sorting</p>
         <p className="text-lg font-semibold text-gray-900">

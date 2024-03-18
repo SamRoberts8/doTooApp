@@ -23,7 +23,7 @@ const TodoSection: React.FC<TodoSectionProps> = ({
   sortIndividualTodo,
 }) => {
   return (
-    <>
+    <div className=" flex-shrink flex flex-col max-h-[338px]">
       <ToDoList
         todos={todos}
         updateTodo={updateTodo}
@@ -33,7 +33,7 @@ const TodoSection: React.FC<TodoSectionProps> = ({
       />
 
       <AddTaskButton addTodo={addTodo} />
-    </>
+    </div>
   );
 };
 
