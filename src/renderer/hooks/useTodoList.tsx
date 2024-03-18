@@ -80,6 +80,21 @@ function useTodoList(initialTodos: Todo[] = []) {
     localStorage.setItem(storageKey, JSON.stringify(todoLists));
   }, [todoLists]);
 
+  const updateCurrentTodoList = (currentListId, todos, completedTodos) => {
+    // Map over the todoLists to find and update the current list
+    const updatedLists = todoLists.map((list) => {
+      if (list.id === currentListId) {
+        // Found the current list, now update its todos and completedTodos
+        return { ...list, todos: todos, completedTodos: completedTodos };
+      }
+      // Return other lists unchanged
+      return list;
+    });
+
+    // Update the todoLists state with the new array of lists
+    setTodoLists(updatedLists);
+  };
+
   // Function to add a new todo
   const addTodo = (title: string) => {
     const newTodo: Todo = {
@@ -126,6 +141,11 @@ function useTodoList(initialTodos: Todo[] = []) {
     );
   };
 
+  useEffect(() => {
+    if (!currentListId || !todos) return;
+    updateCurrentTodoList(currentListId, todos, completedTodos);
+  }, [todos, completedTodos]);
+
   // Function to update a todo's text
   const updateTodo = (id: number, newText: string) => {
     setTodos(
@@ -158,7 +178,7 @@ function useTodoList(initialTodos: Todo[] = []) {
     if (doBeforeOrAfter === 'before' && targetIndex < sortingIndex) {
       sortingTodo.sorted = true;
       updatedTodos.splice(sortingIndex, 1);
-      updatedTodos.splice(targetIndex - 2, 0, sortingTodo);
+      updatedTodos.splice(targetIndex ? targetIndex - 2 : 0, 0, sortingTodo);
       setComparingTodo(undefined);
       setMode('view');
     } else if (doBeforeOrAfter === 'before') {
