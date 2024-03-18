@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 /* eslint-disable react/function-component-definition */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ipcRenderer } from 'electron';
 
 import { CirclePlus } from 'lucide-react';
 
@@ -11,6 +12,18 @@ interface AddTaskButtonProps {
 const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
   const [isInputVisible, setIsInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    const messageHandler = () => {
+      setIsInputVisible(true);
+    };
+
+    ipcRenderer.on('global-shortcut', messageHandler);
+
+    return () => {
+      ipcRenderer.removeListener('global-shortcut', messageHandler);
+    };
+  }, []);
 
   const handleButtonClick = () => {
     setIsInputVisible(true);

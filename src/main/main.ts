@@ -156,6 +156,7 @@ app.on('ready', () => {
 
     // Send a message to the renderer process.
     mainWindow?.webContents.send('global-shortcut', 'Command + Option + M');
+    mainWindow?.show();
   });
 
   if (!ret) {
