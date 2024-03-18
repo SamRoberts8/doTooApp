@@ -9,7 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, globalShortcut } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -83,9 +83,8 @@ const createWindow = async () => {
     titleBarStyle: 'hiddenInset',
 
     webPreferences: {
-      preload: app.isPackaged
-        ? path.join(__dirname, 'preload.js')
-        : path.join(__dirname, '../../.erb/dll/preload.js'),
+      nodeIntegration: true,
+      contextIsolation: false,
     },
   });
 
@@ -144,3 +143,25 @@ app
     });
   })
   .catch(console.log);
+
+ipcMain.on('ipc-example', () => {
+  console.log('ipc-example');
+});
+
+app.on('ready', () => {
+  // Register a 'Command + Option + M' global shortcut listener for macOS.
+  const ret = globalShortcut.register('CommandOrControl+Alt+M', () => {
+    console.log('Command + Option + M is pressed');
+    // Your action goes here. For example, opening a specific app window or executing a particular function.
+
+    // Send a message to the renderer process.
+    mainWindow?.webContents.send('global-shortcut', 'Command + Option + M');
+  });
+
+  if (!ret) {
+    console.log('Registration failed');
+  }
+
+  // Check whether the shortcut is registered.
+  console.log(globalShortcut.isRegistered('CommandOrControl+Alt+M'));
+});

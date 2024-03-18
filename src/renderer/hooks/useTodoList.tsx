@@ -40,10 +40,13 @@ function useTodoList(initialTodos: Todo[] = []) {
     const storedTodoLists = localStorage.getItem(storageKey);
     if (storedTodoLists) {
       const todoListsLocal = JSON.parse(storedTodoLists);
+      const lastUsedListId = localStorage.getItem('lastUsedListId');
       setTodoLists(todoListsLocal);
 
       // If there are existing lists, set the first one as the current list.
-      if (todoListsLocal.length > 0) {
+      if (lastUsedListId !== null) {
+        setCurrentListId(lastUsedListId);
+      } else if (todoListsLocal.length > 0) {
         setCurrentListId(todoListsLocal[0].id);
       }
     } else {
@@ -57,6 +60,7 @@ function useTodoList(initialTodos: Todo[] = []) {
         },
       ];
       localStorage.setItem(storageKey, JSON.stringify(defaultList));
+      localStorage.setItem('lastUsedListId', defaultListId);
       setTodoLists(defaultList);
       setCurrentListId(defaultListId);
     }
@@ -64,7 +68,8 @@ function useTodoList(initialTodos: Todo[] = []) {
 
   useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(todoLists));
-  }, [todoLists, storageKey]);
+    localStorage.setItem('lastUsedListId', currentListId);
+  }, [todoLists, storageKey, currentListId]);
 
   useEffect(() => {
     // Update todos and completedTodos based on currentListId change
@@ -74,11 +79,6 @@ function useTodoList(initialTodos: Todo[] = []) {
       setCompletedTodos(currentList.completedTodos || []);
     }
   }, [currentListId, todoLists]);
-
-  // Save todo lists to local storage whenever todoLists change
-  useEffect(() => {
-    localStorage.setItem(storageKey, JSON.stringify(todoLists));
-  }, [todoLists]);
 
   const updateCurrentTodoList = (currentListId, todos, completedTodos) => {
     // Map over the todoLists to find and update the current list
@@ -262,6 +262,7 @@ function useTodoList(initialTodos: Todo[] = []) {
     currentListId,
     setCurrentListId,
     todos,
+    completedTodos,
     changeActiveList,
     addTodoListAndSetActive,
     addTodo,
