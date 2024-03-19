@@ -27,8 +27,8 @@ function Home() {
   } = useTodoList();
 
   return (
-    <div className="overflow-visible select-none h-screen flex flex-col ">
-      <div className=" z-10 pb-2 flex-grow">
+    <div className="overflow-visible select-none  flex flex-col  h-screen">
+      <div className="flex-none z-10 pb-2">
         <NavBar />
         <div className=" mx-8 flex  mr-14 ">
           <ListTitle

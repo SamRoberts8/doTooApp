@@ -23,7 +23,7 @@ const TodoSection: React.FC<TodoSectionProps> = ({
   sortIndividualTodo,
 }) => {
   return (
-    <div className=" flex-shrink flex flex-col max-h-[338px]">
+    <div className="  flex flex-col h-full justify-between overflow-auto ">
       <ToDoList
         todos={todos}
         updateTodo={updateTodo}

@@ -73,7 +73,7 @@ function ToDoList({ todos, toggleTodo, sortIndividualTodo }: ToDoListProps) {
   const lastTodo = todos[todosLength - 1];
 
   return (
-    <div className="mx-8 mt-6  overflow-auto flex-shrink">
+    <div className="mx-8 mt-6 overflow-auto  shrink min-h-0 min-w-0">
       <ul>
         {todos.map((todo) =>
           todo.completed ? null : (

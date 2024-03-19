@@ -35,16 +35,16 @@ const SortSection: React.FC<SortSectionProps> = ({
           {comparingTodo.title}
         </p>
       </div>
-      <div className="flex w-full justify-between gap-2">
+      <div className="flex w-full justify-start gap-2">
         <button
-          className="w-full px-4 py-3 border border-gray-600 text-gray-900 rounded-md flex-grow"
+          className="w-full px-4 py-3 border border-gray-600 text-gray-900 rounded-md flex-grow max-w-60"
           type="button"
           onClick={() => handleSortClick('after')}
         >
           After
         </button>
         <button
-          className="w-full px-4 py-3 bg-gray-900 text-white rounded-md flex-grow"
+          className="w-full px-4 py-3 bg-gray-900 text-white rounded-md flex-grow max-w-60"
           type="button"
           onClick={() => handleSortClick('before')}
         >

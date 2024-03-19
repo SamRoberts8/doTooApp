@@ -86,7 +86,7 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
   }
 
   return (
-    <div className=" w-screen  z-0  border-t  border-gray-800 border-opacity-10  ">
+    <div className=" w-screen  z-0  border-t  border-gray-800 border-opacity-10 flex-none ">
       <div className="p-2">
         <div
           className=" mx-7 p-2 flex gap-4 items-center cursor-pointer rounded-md"
