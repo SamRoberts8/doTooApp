@@ -25,8 +25,6 @@ const TodoSection: React.FC<TodoSectionProps> = ({
   showAddTaskButton,
 }) => {
   return (
-
-    const 
     <div className="  flex flex-col h-full justify-between overflow-auto ">
       <ToDoList
         todos={todos}
