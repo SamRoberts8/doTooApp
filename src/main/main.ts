@@ -14,6 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { i } from 'mathjs';
 
 class AppUpdater {
   constructor() {
@@ -74,7 +75,7 @@ const createWindow = async () => {
     width: 400,
     height: 450,
     minWidth: 400,
-    minHeight: 450,
+    minHeight: 50,
     frame: false,
     resizable: true,
     transparent: true,
@@ -146,25 +147,50 @@ app
   })
   .catch(console.log);
 
-ipcMain.on('ipc-example', () => {
-  console.log('ipc-example');
-});
-
 app.on('ready', () => {
+  ipcMain.on('resize-window-minimode', () => {
+    mainWindow!.setWindowButtonVisibility(false);
+  });
+  ipcMain.on('resize-window-normalmode', () => {
+    mainWindow!.setWindowButtonVisibility(true);
+  });
   // Register a 'Command + Option + M' global shortcut listener for macOS.
   const ret = globalShortcut.register('CommandOrControl+Alt+M', () => {
     console.log('Command + Option + M is pressed');
-    // Your action goes here. For example, opening a specific app window or executing a particular function.
 
-    // Send a message to the renderer process.
+    if (mainWindow && mainWindow?.getSize()[1] < 200) {
+      mainWindow?.setSize(400, 450);
+    }
+
     mainWindow?.webContents.send('global-shortcut', 'Command + Option + M');
+
     mainWindow?.show();
   });
 
   if (!ret) {
     console.log('Registration failed');
   }
-
   // Check whether the shortcut is registered.
   console.log(globalShortcut.isRegistered('CommandOrControl+Alt+M'));
+
+  const retf = globalShortcut.register('CommandOrControl+Alt+F', () => {
+    console.log('Command + Option + F is pressed');
+    mainWindow?.setSize(400, 50);
+  });
+
+  if (!retf) {
+    console.log('Registration failed');
+  }
+
+  const retg = globalShortcut.register('CommandOrControl+Alt+G', () => {
+    console.log('Command + Option + G is pressed');
+    mainWindow?.setSize(400, 450);
+    // Your action goes here. For example, opening a specific app window or executing a particular function.
+
+    // Send a message to the renderer process
+  });
+
+  if (!retg) {
+    console.log('Registration failed');
+  }
 });

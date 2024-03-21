@@ -15,7 +15,7 @@ interface TodoSectionProps {
   showAddTaskButton: boolean;
 }
 
-const TodoSection: React.FC<TodoSectionProps> = ({
+const TodoSectionSingleTodo: React.FC<TodoSectionProps> = ({
   todos,
   addTodo,
   toggleTodo,
@@ -25,9 +25,7 @@ const TodoSection: React.FC<TodoSectionProps> = ({
   showAddTaskButton,
 }) => {
   return (
-
-    const 
-    <div className="  flex flex-col h-full justify-between overflow-auto ">
+    <div className="flex flex-col h-15 -mt-4 justify-between overflow-auto ">
       <ToDoList
         todos={todos}
         updateTodo={updateTodo}
@@ -40,4 +38,4 @@ const TodoSection: React.FC<TodoSectionProps> = ({
   );
 };
 
-export default TodoSection;
+export default TodoSectionSingleTodo;
