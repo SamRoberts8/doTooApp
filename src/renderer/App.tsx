@@ -1,5 +1,5 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import useTodoList from './hooks/useTodoList';
 import NavBar from './NavBar';
 import './App.css';
@@ -29,6 +29,10 @@ function Home() {
   } = useTodoList();
 
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+  const [focusMode, setFocusMode] = useState(false);
+  const [firstTodo, setFirstTodo] = useState(todos[0]);
+  const [firstTodoHeight, setFirstTodoHeight] = useState(0);
+  const todoSectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -41,30 +45,73 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    if (windowHeight <= 150) {
+    if (windowHeight <= firstTodoHeight + 100) {
       ipcRenderer.send('resize-window-minimode');
+      setFocusMode(true);
     } else {
       ipcRenderer.send('resize-window-normalmode');
+      setFocusMode(false);
     }
   }, [windowHeight]);
 
-  if (windowHeight < 200) {
+  useEffect(() => {
+    if (todos.length > 0) {
+      setFirstTodo(todos[0]);
+    }
+  }, [todos]);
+
+  function sendDivHeight(attemptCount = 0) {
+    if (!firstTodo) {
+      return; // Exit if no todo
+    }
+
+    const divElement = document.getElementById(firstTodo.id);
+    let divHeight = divElement ? divElement.offsetHeight : undefined;
+    if (divHeight === undefined) {
+      divHeight = todoSectionRef.current?.offsetHeight;
+    }
+
+    // Check if divHeight is not obtained from divElement
+    if (divHeight !== undefined && divHeight > 0) {
+      // If we successfully obtained a positive height
+      ipcRenderer.send('resize-window-focus', divHeight);
+      setFirstTodoHeight(divHeight);
+      setFocusMode(true);
+    } else if (attemptCount < 5) {
+      // If we failed to obtain a valid height, retry after a delay
+      setTimeout(() => sendDivHeight(attemptCount + 1), 1000); // Retry after 1 second
+    }
+  }
+
+  ipcRenderer.on('trigger-resize-focus', (event) => {
+    sendDivHeight();
+  });
+
+  useEffect(() => {
+    if (focusMode) {
+      sendDivHeight();
+    }
+  }, [todos, firstTodo, document]);
+
+  if (windowHeight < firstTodoHeight + 100 && todos.length > 0) {
     const todosJustFirst = todos.slice(0, 1);
     return (
       <div className="overflow-visible select-none  flex  justify-center items-center h-screen ">
         <div className="w-22 ">
-          <NavBar title="Current:" />
+          <NavBar title="Current:" height="" marginTop="" />
         </div>
 
-        <TodoSectionSingleTodo
-          todos={todosJustFirst}
-          addTodo={addTodo}
-          toggleTodo={toggleTodo}
-          updateTodo={updateTodo}
-          deleteTodo={deleteTodo}
-          sortIndividualTodo={sortIndividualTodo}
-          showAddTaskButton={false}
-        />
+        <div ref={todoSectionRef} className="todo-section-wrapper">
+          <TodoSectionSingleTodo
+            todos={todosJustFirst}
+            addTodo={addTodo}
+            toggleTodo={toggleTodo}
+            updateTodo={updateTodo}
+            deleteTodo={deleteTodo}
+            sortIndividualTodo={sortIndividualTodo}
+            showAddTaskButton={false}
+          />
+        </div>
       </div>
     );
   }
@@ -72,7 +119,7 @@ function Home() {
   return (
     <div className="overflow-visible select-none  flex flex-col  h-screen">
       <div className="flex-none z-10 pb-2">
-        <NavBar title={''} />
+        <NavBar title={''} height="h-12" marginTop="mt-4" />
         <div className=" mx-8 flex  mr-14 ">
           <ListTitle
             todoLists={todoLists}

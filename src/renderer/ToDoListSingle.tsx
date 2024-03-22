@@ -20,14 +20,14 @@ const TodoItem: React.FC<TodoItemProps> = ({
   const [isHover, setIsHover] = React.useState(false);
 
   return (
-    <li id={todo.id} className="group -z-10">
-      <div>
+    <li className="group -z-10">
+      <div id="todo-single">
         <div
-          className="flex items-center justify-between min-h-10 gap-4 relative "
+          className="flex items-center justify-between  gap-4 relative "
           onMouseEnter={() => setIsHover(true)}
           onMouseLeave={() => setIsHover(false)}
         >
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-4 min-h-10 items-center">
             <div
               className="border-gray-800 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center"
               onClick={() => toggleTodo(todo.id)}
@@ -37,8 +37,8 @@ const TodoItem: React.FC<TodoItemProps> = ({
                 size={14}
               />
             </div>
-            <div className="flex flex-col min-w-56 pr-14">
-              <p className="font-medium text-gray-800 break-words">
+            <div className="flex flex-col w-56">
+              <p className="font-medium  text-gray-800 break-words">
                 {todo.title}
               </p>
             </div>
@@ -46,7 +46,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
           <button
             type="button"
             onClick={() => sortIndividualTodo(todo)}
-            className="hidden h-8 px-4 py-1 text-sm bg-gray-800 text-white rounded-md group-hover:flex absolute right-0 mr-2  items-center justify-center"
+            className="hidden h-8 px-4 py-1 text-sm bg-gray-800 text-white rounded-md group-hover:flex absolute right-0 items-center justify-center"
           >
             Sort
           </button>
@@ -66,21 +66,18 @@ interface ToDoListProps {
   todos: Todo[];
   toggleTodo: (id: string) => void;
   sortIndividualTodo: (todoToSort: Todo) => void;
-  ref: React.RefObject<HTMLDivElement>;
 }
 
-function ToDoList({
+function ToDoListSingle({
   todos,
   toggleTodo,
   sortIndividualTodo,
-  ref,
 }: ToDoListProps) {
   const todosLength = todos.length;
   const lastTodo = todos[todosLength - 1];
-  const firstTodo = todos[0];
 
   return (
-    <div className="mx-8 mt-6 overflow-auto  shrink min-h-0 min-w-0">
+    <div className="mx-8 overflow-auto  shrink min-h-0 min-w-0">
       <ul>
         {todos.map((todo) =>
           todo.completed ? null : (
@@ -90,7 +87,6 @@ function ToDoList({
               toggleTodo={toggleTodo}
               sortIndividualTodo={sortIndividualTodo}
               lastTodo={lastTodo}
-              ref={todo.id === firstTodo.id ? ref : null}
             />
           ),
         )}
@@ -99,4 +95,4 @@ function ToDoList({
   );
 }
 
-export default ToDoList;
+export default ToDoListSingle;

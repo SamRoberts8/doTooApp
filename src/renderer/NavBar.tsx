@@ -2,16 +2,18 @@ import React from 'react';
 
 interface NavBarProps {
   title: string;
+  height: string;
+  marginTop: string;
 }
 
-function NavBar({ title }: NavBarProps) {
+function NavBar({ title, height, marginTop }: NavBarProps) {
   return (
     <nav
-      className="w-full h-12 draggable"
+      className={`w-full draggable ${height}`}
       style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
     >
       {title !== '' ? (
-        <p className="mt-4 ml-8 font-bold text-lg">{title}</p>
+        <p className={`${marginTop} ml-8 font-bold text-lg`}>{title}</p>
       ) : null}
     </nav>
   );

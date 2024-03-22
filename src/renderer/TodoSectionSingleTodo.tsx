@@ -4,6 +4,7 @@ import React from 'react';
 import ToDoList from './ToDoList';
 import AddTaskButton from './AddTaskButton';
 import { Todo } from './types'; // Assuming you have a types file for Todo, if not, define it here.
+import ToDoListSingle from './ToDoListSingle';
 
 interface TodoSectionProps {
   todos: Todo[];
@@ -25,8 +26,8 @@ const TodoSectionSingleTodo: React.FC<TodoSectionProps> = ({
   showAddTaskButton,
 }) => {
   return (
-    <div className="flex flex-col h-15 -mt-4 justify-between overflow-auto ">
-      <ToDoList
+    <div className="flex flex-col  justify-between overflow-auto ">
+      <ToDoListSingle
         todos={todos}
         updateTodo={updateTodo}
         deleteTodo={deleteTodo}

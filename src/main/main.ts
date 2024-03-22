@@ -14,7 +14,6 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { i } from 'mathjs';
 
 class AppUpdater {
   constructor() {
@@ -148,9 +147,20 @@ app
   .catch(console.log);
 
 app.on('ready', () => {
+  ipcMain.on('resize-window-focus', (event, height) => {
+    if (height === 0) {
+      return;
+    }
+    const { width } = mainWindow!.getBounds(); // Get current width
+    const windowFrameHeight = 0; // Adjust based on your OS and window decoration
+    mainWindow?.setSize(width, height + windowFrameHeight); // Set new height
+    mainWindow!.setWindowButtonVisibility(false);
+  });
+
   ipcMain.on('resize-window-minimode', () => {
     mainWindow!.setWindowButtonVisibility(false);
   });
+
   ipcMain.on('resize-window-normalmode', () => {
     mainWindow!.setWindowButtonVisibility(true);
   });
@@ -175,7 +185,7 @@ app.on('ready', () => {
 
   const retf = globalShortcut.register('CommandOrControl+Alt+F', () => {
     console.log('Command + Option + F is pressed');
-    mainWindow?.setSize(400, 50);
+    mainWindow?.webContents.send('trigger-resize-focus');
   });
 
   if (!retf) {
