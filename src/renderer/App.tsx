@@ -5,6 +5,7 @@ import NavBar from './NavBar';
 import './App.css';
 import TodoSection from './TodoSection';
 import TodoSectionSingleTodo from './TodoSectionSingleTodo';
+import CompletedSection from './CompletedSection';
 import SortSection from './SortSection';
 import ListTitle from '../components/ui/ListTitle.tsx';
 import { ipcRenderer } from 'electron';
@@ -16,6 +17,7 @@ function Home() {
     addTodoListAndSetActive,
     currentListId,
     todos,
+    completedTodos,
     comparingTodo,
     addTodo,
     toggleTodo,
@@ -60,7 +62,7 @@ function Home() {
     }
   }, [todos]);
 
-  function sendDivHeight(attemptCount = 0) {
+  const sendDivHeight = (attemptCount: number = 0): void => {
     if (!firstTodo) {
       return; // Exit if no todo
     }
@@ -81,7 +83,7 @@ function Home() {
       // If we failed to obtain a valid height, retry after a delay
       setTimeout(() => sendDivHeight(attemptCount + 1), 1000); // Retry after 1 second
     }
-  }
+  };
 
   ipcRenderer.on('trigger-resize-focus', (event) => {
     sendDivHeight();
@@ -126,6 +128,9 @@ function Home() {
             currentListId={currentListId}
             changeActiveList={changeActiveList}
             addTodoListAndSetActive={addTodoListAndSetActive}
+            todos={todos}
+            completedTodos={completedTodos}
+            setMode={setMode}
           />
         </div>
       </div>
@@ -140,7 +145,7 @@ function Home() {
           sortIndividualTodo={sortIndividualTodo}
           showAddTaskButton={true}
         />
-      ) : (
+      ) : mode === 'sort' ? (
         <SortSection
           todos={todos}
           sortingTodo={sortingTodo}
@@ -148,6 +153,8 @@ function Home() {
           handleSortClick={handleSortClick}
           setMode={setMode}
         />
+      ) : (
+        <CompletedSection completedTodos={completedTodos} />
       )}
     </div>
   );
