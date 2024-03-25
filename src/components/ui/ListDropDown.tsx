@@ -24,6 +24,8 @@ interface ListDropDownProps {
   changeActiveList: (id: string) => void;
   addTodoListAndSetActive: (name: string) => void;
   currentListId: string;
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
 
 // eslint-disable-next-line react/function-component-definition
@@ -33,9 +35,11 @@ const ListDropDown: React.FC<ListDropDownProps> = ({
   changeActiveList,
   addTodoListAndSetActive,
   currentListId,
+  open,
+  setOpen,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [open, setOpen] = useState(false);
+
   const [value, setValue] = useState('');
   const [inputValue, setInputValue] = useState(''); // Track input value
   const [showCard, setShowCard] = useState(false);

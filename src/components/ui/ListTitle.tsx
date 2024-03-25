@@ -24,11 +24,13 @@ function ListTitle({
   setMode,
 }: ListTitleProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [open, setOpen] = useState(false);
   const currentList = todoLists.find((list) => list.id === currentListId);
   const listName = currentList ? currentList.name : '';
 
   const todosLength = todos.length;
   const completedTodosLength = completedTodos.length;
+
   const completedTodoThisWeek = completedTodos.filter((todo) => {
     const today = new Date();
     const sevenDaysAgo = new Date(today.setDate(today.getDate() - 7));
@@ -43,7 +45,9 @@ function ListTitle({
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex flex-row">
-        <h1 className="text-2xl font-bold">{listName}</h1>
+        <h1 className="text-2xl font-bold" onClick={() => setOpen(!open)}>
+          {listName}
+        </h1>
         <div className="ml-2">
           <ListDropDown
             isHovered={isHovered}
@@ -52,6 +56,8 @@ function ListTitle({
             changeActiveList={changeActiveList}
             addTodoListAndSetActive={addTodoListAndSetActive}
             currentListId={currentListId}
+            open={open}
+            setOpen={setOpen}
           />
         </div>
       </div>
