@@ -3,12 +3,20 @@ import Rive from '@rive-app/react-canvas';
 import confettiAnimation from './confetti.riv';
 import AlertIcon from './icons/AlertIcon';
 import { Check } from 'lucide-react';
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+  ContextMenuSeparator,
+} from '../components/ui/context-menu';
 
 import { Todo } from './types';
 
 interface TodoItemProps {
   todo: Todo;
   toggleTodo: (id: string) => void;
+  deleteTodo: (id: string) => void;
   sortIndividualTodo: (todoToSort: Todo) => void;
   lastTodo: Todo;
   triggerConfetti: () => void;
@@ -18,6 +26,7 @@ interface TodoItemProps {
 const TodoItem: React.FC<TodoItemProps> = ({
   todo,
   toggleTodo,
+  deleteTodo,
   sortIndividualTodo,
   lastTodo,
   triggerConfetti,
@@ -31,38 +40,52 @@ const TodoItem: React.FC<TodoItemProps> = ({
 
   return (
     <li id={todo.id} className="group -z-10">
-      <div>
-        <div
-          className="flex items-center justify-between min-h-10 gap-4 relative "
-          onMouseEnter={() => setIsHover(true)}
-          onMouseLeave={() => setIsHover(false)}
-        >
-          <div className="flex gap-4 items-center">
-            <div
-              className="border-gray-800 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center"
-              onClick={() => completeTodo(todo.id)}
-            >
-              <Check
-                className={isHover ? 'opacity-100' : 'opacity-0'}
-                size={14}
-              />
-            </div>
-            <div className="flex flex-col min-w-56 pr-14">
-              <p className="font-medium text-gray-800 break-words">
-                {todo.title}
-              </p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={() => sortIndividualTodo(todo)}
-            className="hidden h-8 px-4 py-1 text-sm bg-gray-800 text-white rounded-md group-hover:flex absolute right-0 mr-2  items-center justify-center"
+      <ContextMenu>
+        <ContextMenuTrigger>
+          <div
+            className="flex items-center justify-between min-h-10 gap-4 relative "
+            onMouseEnter={() => setIsHover(true)}
+            onMouseLeave={() => setIsHover(false)}
           >
-            Sort
-          </button>
-          {todo.sorted ? '' : <AlertIcon />}
-        </div>
-      </div>
+            <div className="flex gap-4 items-center">
+              <div
+                className="border-gray-800 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center"
+                onClick={() => completeTodo(todo.id)}
+              >
+                <Check
+                  className={isHover ? 'opacity-100' : 'opacity-0'}
+                  size={14}
+                />
+              </div>
+              <div className="flex flex-col min-w-56 pr-14">
+                <p className="font-medium text-gray-800 break-words">
+                  {todo.title}
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => sortIndividualTodo(todo)}
+              className="hidden h-8 px-4 py-1 text-sm bg-gray-800 text-white rounded-md group-hover:flex absolute right-0 mr-2  items-center justify-center"
+            >
+              Sort
+            </button>
+            {todo.sorted ? '' : <AlertIcon />}
+          </div>
+        </ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem>Complete</ContextMenuItem>
+          <ContextMenuItem>Rename</ContextMenuItem>
+          <ContextMenuSeparator />
+          <ContextMenuItem
+            onClick={() => deleteTodo(todo.id)}
+            className="text-red-500"
+          >
+            Delete
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+
       {todo === lastTodo ? (
         ''
       ) : (
@@ -75,6 +98,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
 interface ToDoListProps {
   todos: Todo[];
   toggleTodo: (id: string) => void;
+  deleteTodo: (id: string) => void;
   sortIndividualTodo: (todoToSort: Todo) => void;
   ref: React.RefObject<HTMLDivElement>;
 }
@@ -82,6 +106,7 @@ interface ToDoListProps {
 function ToDoList({
   todos,
   toggleTodo,
+  deleteTodo,
   sortIndividualTodo,
   ref,
 }: ToDoListProps) {
@@ -127,6 +152,7 @@ function ToDoList({
               key={todo.id}
               todo={todo}
               toggleTodo={toggleTodo}
+              deleteTodo={deleteTodo}
               sortIndividualTodo={sortIndividualTodo}
               lastTodo={lastTodo}
               ref={todo.id === firstTodo.id ? ref : null}
