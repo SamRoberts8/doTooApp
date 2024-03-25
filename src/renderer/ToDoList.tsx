@@ -17,6 +17,7 @@ interface TodoItemProps {
   todo: Todo;
   toggleTodo: (id: string) => void;
   deleteTodo: (id: string) => void;
+  renameTodo: (id: string, newName: string) => void;
   sortIndividualTodo: (todoToSort: Todo) => void;
   lastTodo: Todo;
   triggerConfetti: () => void;
@@ -27,6 +28,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
   todo,
   toggleTodo,
   deleteTodo,
+  renameTodo,
   sortIndividualTodo,
   lastTodo,
   triggerConfetti,
@@ -63,7 +65,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
   const handleTitleSubmit = (e) => {
     if (e.key === 'Enter' || e.type === 'blur') {
       // Assuming there's a function to update the todo title in the parent component
-      console.log(todo.id, editedTitle);
+      renameTodo(todo.id, editedTitle);
       setIsEditing(false);
     }
   };
@@ -144,6 +146,7 @@ interface ToDoListProps {
   todos: Todo[];
   toggleTodo: (id: string) => void;
   deleteTodo: (id: string) => void;
+  renameTodo: (id: string, newName: string) => void;
   sortIndividualTodo: (todoToSort: Todo) => void;
   ref: React.RefObject<HTMLDivElement>;
 }
@@ -152,6 +155,7 @@ function ToDoList({
   todos,
   toggleTodo,
   deleteTodo,
+  renameTodo,
   sortIndividualTodo,
   ref,
 }: ToDoListProps) {
@@ -198,6 +202,7 @@ function ToDoList({
               todo={todo}
               toggleTodo={toggleTodo}
               deleteTodo={deleteTodo}
+              renameTodo={renameTodo}
               sortIndividualTodo={sortIndividualTodo}
               lastTodo={lastTodo}
               ref={todo.id === firstTodo.id ? ref : null}

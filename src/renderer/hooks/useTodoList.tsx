@@ -163,6 +163,13 @@ function useTodoList(initialTodos: Todo[] = []) {
     setTodos(todos.filter((todo) => todo.id !== id.toString()));
   };
 
+  const renameTodo = (id: string, newName: string): void => {
+    const updatedTodos = [...todos];
+    const todoIndex = updatedTodos.findIndex((t) => t.id === id);
+    updatedTodos[todoIndex].title = newName;
+    setTodos(updatedTodos);
+  };
+
   const sortTodo = useCallback(() => {
     if (!sortingTodo || doBeforeOrAfter === undefined) return;
 
@@ -270,6 +277,7 @@ function useTodoList(initialTodos: Todo[] = []) {
     toggleTodo,
     updateTodo,
     deleteTodo,
+    renameTodo,
     handleSortClick,
     mode,
     setMode,

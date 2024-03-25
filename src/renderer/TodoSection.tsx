@@ -8,9 +8,10 @@ import { Todo } from './types'; // Assuming you have a types file for Todo, if n
 interface TodoSectionProps {
   todos: Todo[];
   addTodo: (todo: string) => void;
-  toggleTodo: (id: number) => void;
-  updateTodo: (id: number, newTask: string) => void;
-  deleteTodo: (id: number) => void;
+  toggleTodo: (id: string) => void;
+  updateTodo: (id: string, newTask: string) => void;
+  deleteTodo: (id: string) => void;
+  renameTodo: (id: string, newName: string) => void;
   sortIndividualTodo: (todoToSort: Todo) => void;
   showAddTaskButton: boolean;
 }
@@ -21,6 +22,7 @@ const TodoSection: React.FC<TodoSectionProps> = ({
   toggleTodo,
   updateTodo,
   deleteTodo,
+  renameTodo,
   sortIndividualTodo,
   showAddTaskButton,
 }) => {
@@ -31,6 +33,7 @@ const TodoSection: React.FC<TodoSectionProps> = ({
         updateTodo={updateTodo}
         deleteTodo={deleteTodo}
         toggleTodo={toggleTodo}
+        renameTodo={renameTodo}
         sortIndividualTodo={sortIndividualTodo}
       />
       {showAddTaskButton && <AddTaskButton addTodo={addTodo} />}

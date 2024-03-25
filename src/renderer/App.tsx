@@ -23,6 +23,7 @@ function Home() {
     toggleTodo,
     updateTodo,
     deleteTodo,
+    renameTodo,
     handleSortClick,
     mode,
     setMode,
@@ -142,6 +143,7 @@ function Home() {
           toggleTodo={toggleTodo}
           updateTodo={updateTodo}
           deleteTodo={deleteTodo}
+          renameTodo={renameTodo}
           sortIndividualTodo={sortIndividualTodo}
           showAddTaskButton={true}
         />
