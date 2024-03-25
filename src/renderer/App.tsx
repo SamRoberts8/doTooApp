@@ -154,9 +154,7 @@ function Home() {
           setMode={setMode}
         />
       ) : (
-        <div>
-          <CompletedSection completedTodos={completedTodos} />
-        </div>
+        <CompletedSection completedTodos={completedTodos} />
       )}
     </div>
   );

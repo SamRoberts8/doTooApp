@@ -49,13 +49,17 @@ function CompletedSection({ completedTodos }: CompletedSectionProps) {
     <div className="mx-7 mt-4 flex flex-col h-full justify-between overflow-auto">
       {sortedDates.map((date) => {
         const todos = groupedTodos[date];
+        const todosLength = todos.length;
 
         return (
           <div key={date}>
             <div className="font-bold ">{date}</div>
-            <div className="mt-2 mb-4  border-b  border-gray-800 opacity-10" />
+            <div className="text-xs  text-gray-500 mt-1">
+              {todosLength} completed
+              <div className="mt-2 mb-4  border-b  border-gray-800 opacity-10" />
+            </div>
             {todos.map((todo) => (
-              <div key={todo.id} className="rounded-md p-2 ">
+              <div key={todo.id} className="rounded-md p-2 overflow-hidden ">
                 <div className="flex flex-col  justify-start">
                   <div>{todo.title}</div>
                   <div className="text-xs  text-gray-500 mt-2">
@@ -63,8 +67,8 @@ function CompletedSection({ completedTodos }: CompletedSectionProps) {
                       ? format(parseISO(todo.completedAt.toString()), 'p')
                       : ''}
                   </div>
+                  <div className="mt-2 mb-2  border-b  border-gray-800 opacity-10" />
                 </div>
-                <div className="mt-2 mb-2  border-b  border-gray-800 opacity-10" />
               </div>
             ))}
           </div>
