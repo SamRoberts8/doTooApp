@@ -74,7 +74,9 @@ const TodoItem: React.FC<TodoItemProps> = ({
           </div>
         </ContextMenuTrigger>
         <ContextMenuContent>
-          <ContextMenuItem>Complete</ContextMenuItem>
+          <ContextMenuItem onClick={() => toggleTodo(todo.id)}>
+            Complete
+          </ContextMenuItem>
           <ContextMenuItem>Rename</ContextMenuItem>
           <ContextMenuSeparator />
           <ContextMenuItem
