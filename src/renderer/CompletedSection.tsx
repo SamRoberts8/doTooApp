@@ -49,7 +49,7 @@ function CompletedSection({ completedTodos }: CompletedSectionProps) {
     <div className="mx-7 mt-4 flex flex-col h-full justify-between overflow-auto">
       {sortedDates.map((date) => {
         const todos = groupedTodos[date];
-        console.log(date);
+
         return (
           <div key={date}>
             <div className="font-bold ">{date}</div>

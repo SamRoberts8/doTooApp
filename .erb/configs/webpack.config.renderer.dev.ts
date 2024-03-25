@@ -117,6 +117,15 @@ export default merge(baseConfig, {
           },
         },
       },
+      {
+        test: /\.riv$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 100000,
+          },
+        },
+      },
       // Common Image Formats
       {
         test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,

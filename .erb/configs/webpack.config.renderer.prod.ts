@@ -87,6 +87,15 @@ export default merge(baseConfig, {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
       },
+      {
+        test: /\.riv$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 100000,
+          },
+        },
+      },
       // SVG Font
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
