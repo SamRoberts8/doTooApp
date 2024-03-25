@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Rive from '@rive-app/react-canvas';
 import confettiAnimation from './confetti.riv';
 import AlertIcon from './icons/AlertIcon';
@@ -31,11 +31,41 @@ const TodoItem: React.FC<TodoItemProps> = ({
   lastTodo,
   triggerConfetti,
 }) => {
-  const [isHover, setIsHover] = React.useState(false);
+  const [isHover, setIsHover] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(todo.title);
+
+  const editInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isEditing) {
+      const timer = setTimeout(() => {
+        editInputRef.current?.focus();
+      }, 100); // Adjust the delay as needed
+      return () => clearTimeout(timer);
+    }
+    return undefined;
+  }, [isEditing]);
 
   const completeTodo = (id: string) => {
     toggleTodo(id);
     triggerConfetti();
+  };
+
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleTitleChange = (e) => {
+    setEditedTitle(e.target.value);
+  };
+
+  const handleTitleSubmit = (e) => {
+    if (e.key === 'Enter' || e.type === 'blur') {
+      // Assuming there's a function to update the todo title in the parent component
+      console.log(todo.id, editedTitle);
+      setIsEditing(false);
+    }
   };
 
   return (
@@ -58,9 +88,22 @@ const TodoItem: React.FC<TodoItemProps> = ({
                 />
               </div>
               <div className="flex flex-col min-w-56 pr-14">
-                <p className="font-medium text-gray-800 break-words">
-                  {todo.title}
-                </p>
+                {isEditing ? (
+                  <input
+                    ref={editInputRef}
+                    type="text"
+                    value={editedTitle}
+                    onChange={handleTitleChange}
+                    onKeyDown={handleTitleSubmit}
+                    onBlur={handleTitleSubmit}
+                    onFocus={(e) => e.target.select()}
+                    className="form-input font-medium text-gray-800 break-words bg-transparent focus:outline-none"
+                  />
+                ) : (
+                  <p className="font-medium text-gray-800 break-words">
+                    {todo.title}
+                  </p>
+                )}
               </div>
             </div>
             <button
@@ -77,7 +120,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
           <ContextMenuItem onClick={() => toggleTodo(todo.id)}>
             Complete
           </ContextMenuItem>
-          <ContextMenuItem>Rename</ContextMenuItem>
+          <ContextMenuItem onClick={toggleEdit}>Rename</ContextMenuItem>
           <ContextMenuSeparator />
           <ContextMenuItem
             onClick={() => deleteTodo(todo.id)}
