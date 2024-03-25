@@ -11,6 +11,7 @@ interface TodoItemProps {
   toggleTodo: (id: string) => void;
   sortIndividualTodo: (todoToSort: Todo) => void;
   lastTodo: Todo;
+  triggerConfetti: () => void;
 }
 
 // eslint-disable-next-line react/function-component-definition
