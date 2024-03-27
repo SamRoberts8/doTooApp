@@ -9,11 +9,13 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
+import { writeFile, readFile } from 'fs';
 import { app, BrowserWindow, shell, ipcMain, globalShortcut } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import fs from 'fs';
 
 class AppUpdater {
   constructor() {
@@ -203,4 +205,119 @@ app.on('ready', () => {
   if (!retg) {
     console.log('Registration failed');
   }
+});
+
+const getBackupFileName = () => {
+  const date = new Date();
+
+  // Pad single digits with leading zeros
+  const pad = (num) => num.toString().padStart(2, '0');
+
+  // Extract components using local time
+  const year = date.getFullYear();
+  const month = pad(date.getMonth() + 1); // getMonth() is zero-indexed
+  const day = pad(date.getDate());
+  const hours = pad(date.getHours());
+  const minutes = pad(date.getMinutes());
+  const seconds = pad(date.getSeconds());
+
+  // Format date and time strings
+  const dateString = `${year}-${month}-${day}`; // YYYY-MM-DD
+  const timeString = `${hours}-${minutes}-${seconds}`; // HH-MM-SS
+
+  // Return the formatted backup file name
+  return `backup-${dateString}-${timeString}.json`;
+};
+
+const shouldBackup = (backupDir, callback) => {
+  fs.readdir(backupDir, (err, files) => {
+    if (err) {
+      console.error('Failed to list backup directory', err);
+      fs.mkdir(backupDir, (err) => {
+        if (err) {
+          console.error('Failed to create backup directory', err);
+          return callback(false);
+        }
+        console.log('Backup directory created');
+      });
+    }
+
+    const backupFiles = files
+      .filter((file) => file.startsWith('backup-') && file.endsWith('.json'))
+      .sort();
+    if (backupFiles.length === 0) {
+      return callback(true); // No backups yet, proceed
+    }
+
+    const latestBackupFile = backupFiles[backupFiles.length - 1];
+
+    const datePart = latestBackupFile.substring(7, 17);
+    const timePart = latestBackupFile.substring(18, 26);
+    const formattedTimePart = timePart.replace(/-/g, ':');
+
+    const isoDateString = `${datePart}T${formattedTimePart}`;
+
+    const latestBackupDate = new Date(isoDateString);
+
+    const latestBackupDateTimestamp = latestBackupDate.getTime();
+
+    const now = Date.now();
+
+    // Check if the latest backup is at least 5 minute old
+    if (now - latestBackupDateTimestamp > 600000) {
+      return callback(true);
+    }
+    return callback(false);
+  });
+};
+
+const maintainBackups = (backupDir: string) => {
+  fs.readdir(backupDir, (err, files) => {
+    if (err) {
+      console.error('Failed to list backup directory:', err);
+      fs.mkdir(backupDir, (err) => {
+        if (err) {
+          console.error('Failed to create backup directory:', err);
+          return;
+        }
+        console.log('Backup directory created');
+      });
+    }
+
+    // Filter for backup files and sort them so the oldest is first
+    const backupFiles = files
+      .filter((file) => file.startsWith('backup-') && file.endsWith('.json'))
+      .sort();
+
+    // If there are more than 10 backups, delete the oldest ones
+    while (backupFiles.length > 10) {
+      const fileToDelete = backupFiles.shift(); // Removes the oldest item from the array
+      fs.unlink(path.join(backupDir, fileToDelete), (err) => {
+        if (err) {
+          console.error('Failed to delete old backup', fileToDelete, err);
+        } else {
+          console.log(`Deleted old backup: ${fileToDelete}`);
+        }
+      });
+    }
+  });
+};
+ipcMain.on('backup-data', (event, data) => {
+  const backupDir = path.join(app.getPath('userData'), 'backUps');
+
+  shouldBackup(backupDir, (proceed: boolean) => {
+    if (!proceed) return;
+
+    maintainBackups(backupDir); // Clean up before creating a new backup
+
+    const backupFileName = getBackupFileName();
+    const filePath = path.join(backupDir, backupFileName);
+    fs.writeFile(filePath, data, (err) => {
+      if (err) {
+        console.error('Failed to save backup', err);
+        return;
+      }
+      console.log(`Backup saved: ${backupFileName}`);
+    });
+  });
 });

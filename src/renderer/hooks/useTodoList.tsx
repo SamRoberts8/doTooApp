@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { ipcRenderer } from 'electron';
 import { v4 as uuidv4 } from 'uuid';
 import { Todo, TodoList } from '../types';
 
@@ -69,6 +70,8 @@ function useTodoList(initialTodos: Todo[] = []) {
   useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(todoLists));
     localStorage.setItem('lastUsedListId', currentListId);
+
+    ipcRenderer.send('backup-data', JSON.stringify(todoLists));
   }, [todoLists, storageKey, currentListId]);
 
   useEffect(() => {
