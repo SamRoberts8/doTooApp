@@ -75,7 +75,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
       <ContextMenu>
         <ContextMenuTrigger>
           <div
-            className="flex items-center justify-between min-h-10 gap-4 relative "
+            className="flex items-center justify-between min-h-10 gap-4 relative my-5 "
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}
           >
@@ -102,7 +102,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
                     className="form-input font-medium text-gray-800 break-words bg-transparent focus:outline-none"
                   />
                 ) : (
-                  <p className="font-medium text-gray-800 break-words">
+                  <p className="font-medium text-gray-800 break-words ">
                     {todo.title}
                   </p>
                 )}

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import ListDropDown from './ListDropDown';
 import { Todo, TodoList } from '../../renderer/types';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from './hover-card';
 
 interface ListTitleProps {
   todoLists: TodoList[];
@@ -29,15 +30,29 @@ function ListTitle({
   const listName = currentList ? currentList.name : '';
 
   const todosLength = todos.length;
-  const completedTodosLength = completedTodos.length;
 
-  const completedTodoThisWeek = completedTodos.filter((todo) => {
+  const completedTodoTodayLength = completedTodos.filter((todo) => {
     const today = new Date();
-    const sevenDaysAgo = new Date(today.setDate(today.getDate() - 7));
+    today.setHours(0, 0, 0, 0);
     const completedAt = todo.completedAt ? new Date(todo.completedAt) : null;
-    return completedAt && completedAt > sevenDaysAgo;
-  });
-  const completedTodoThisWeekLength = completedTodoThisWeek.length;
+    return completedAt && completedAt >= today;
+  }).length;
+
+  const completedTodoPastWeekLength = completedTodos.filter((todo) => {
+    const today = new Date();
+    const completedAt = todo.completedAt ? new Date(todo.completedAt) : null;
+    const pastWeek = new Date(today.setDate(today.getDate() - 7));
+    return completedAt && completedAt >= pastWeek;
+  }).length;
+
+  const completedTodoPastMonthLength = completedTodos.filter((todo) => {
+    const today = new Date();
+    const completedAt = todo.completedAt ? new Date(todo.completedAt) : null;
+    const pastMonth = new Date(today.setDate(today.getDate() - 28));
+    return completedAt && completedAt >= pastMonth;
+  }).length;
+
+  const completedTodoAllTimeLenght = completedTodos.length;
 
   return (
     <div
@@ -61,20 +76,30 @@ function ListTitle({
           />
         </div>
       </div>
-      <h2 className="text-gray-800 opacity-40 text-sm mt-1">
+      <h2 className="text-gray-500  text-sm mt-1">
         <span
           className="cursor-pointer hover:underline"
           onClick={() => setMode('view')}
         >
           {todosLength} doToos,
         </span>{' '}
-        <span
-          className="cursor-pointer hover:underline"
-          onClick={() => setMode('completed')}
-        >
-          {completedTodoThisWeekLength} completed this week,{' '}
-          {completedTodosLength} all-time.
-        </span>
+        <HoverCard>
+          <HoverCardTrigger>
+            <span
+              className="cursor-pointer hover:underline"
+              onClick={() => setMode('completed')}
+            >
+              {completedTodoTodayLength} completed today.
+            </span>
+          </HoverCardTrigger>
+          <HoverCardContent className="my-2">
+            <h3 className="font-bold">Completed Tasks Summary</h3>
+            <p className="mt-2">{completedTodoTodayLength} today.</p>
+            <p className="mt-1">{completedTodoPastWeekLength} past week.</p>
+            <p className="mt-1">{completedTodoPastMonthLength} past month.</p>
+            <p className="mt-1">{completedTodoAllTimeLenght} all time.</p>
+          </HoverCardContent>
+        </HoverCard>
       </h2>
     </div>
   );
