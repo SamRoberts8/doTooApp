@@ -13,12 +13,15 @@ import {
 import { Input } from './input';
 import { Label } from './label';
 
-interface CardPopUpProps {
+interface CreateCardPopUpProps {
   setShowCard: (value: boolean) => void;
   addTodoListAndSetActive: (name: string) => void;
 }
 
-function CardPopUp({ setShowCard, addTodoListAndSetActive }: CardPopUpProps) {
+function CreateCardPopUp({
+  setShowCard,
+  addTodoListAndSetActive,
+}: CreateCardPopUpProps) {
   const [inputValue, setInputValue] = useState('');
 
   const onAddList = () => {
@@ -70,4 +73,4 @@ function CardPopUp({ setShowCard, addTodoListAndSetActive }: CardPopUpProps) {
   );
 }
 
-export default CardPopUp;
+export default CreateCardPopUp;

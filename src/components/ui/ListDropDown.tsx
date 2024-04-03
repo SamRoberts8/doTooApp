@@ -12,11 +12,26 @@ import {
   CommandSeparator,
 } from './command';
 
-import CardPopUp from './CardPopUp';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
+  DropdownMenuItem,
+} from './dropdown-menu';
+
+import CreateCardPopUp from './CreateCardPopUp';
 
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 
 import { Todos } from '../types';
+
+import RenameCardPopUp from './RenameCardPopUp';
 
 interface ListDropDownProps {
   isHovered: boolean;
@@ -26,6 +41,8 @@ interface ListDropDownProps {
   currentListId: string;
   open: boolean;
   setOpen: (open: boolean) => void;
+  renameTodoList: (listId: string, name: string) => void;
+  deleteTodoList: (listId: string) => void;
 }
 
 // eslint-disable-next-line react/function-component-definition
@@ -37,39 +54,48 @@ const ListDropDown: React.FC<ListDropDownProps> = ({
   currentListId,
   open,
   setOpen,
+  renameTodoList,
+  deleteTodoList,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [value, setValue] = useState('');
   const [inputValue, setInputValue] = useState(''); // Track input value
-  const [showCard, setShowCard] = useState(false);
+  const [showCreateCard, setShowCreateCard] = useState(false);
+  const [showRenameCard, setShowRenameCard] = useState(false);
+  const [renameList, setRenameList] = useState('');
+  const [renameListId, setRenameListId] = useState('');
 
   const currentList = todoLists.find((list) => list.id === currentListId);
   const listName = currentList ? currentList.name : '';
-
-  const createNewList = () => {
-    addTodoListAndSetActive(inputValue);
-    setOpen(false);
-    setInputValue('');
-    setValue('');
-  };
 
   useEffect(() => {
     setValue(listName);
   }, [listName]);
 
-  if (showCard) {
+  if (showCreateCard) {
     return (
-      <CardPopUp
-        setShowCard={setShowCard}
+      <CreateCardPopUp
+        setShowCard={setShowCreateCard}
         addTodoListAndSetActive={addTodoListAndSetActive}
       />
     );
   }
 
+  if (showRenameCard) {
+    return (
+      <RenameCardPopUp
+        setShowCard={setShowRenameCard}
+        listName={renameList}
+        listId={renameListId}
+        renameTodoList={renameTodoList}
+      />
+    );
+  }
+
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
+      <DropdownMenuTrigger className="outline-none">
         <Button
           variant="ghost"
           role="combobox"
@@ -78,60 +104,83 @@ const ListDropDown: React.FC<ListDropDownProps> = ({
         >
           <ChevronDown className=" shrink-0 " />
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command className="  h-full">
-          <CommandInput
-            placeholder="Search Lists..."
-            value={inputValue}
-            onValueChange={setInputValue}
-          />
-          <CommandEmpty>
-            <button type="button" onClick={() => createNewList()}>
-              Create New List
-            </button>
-          </CommandEmpty>
-          <CommandGroup>
-            <CommandList className="max-h-60  overflow-y-auto overflow-x-hidden">
-              {todoLists.length > 0 ? (
-                todoLists.map((list) => (
-                  <CommandItem
-                    key={list.id}
-                    value={list.name}
-                    onSelect={() => {
-                      changeActiveList(list.id);
-                      setOpen(false);
-                      setInputValue('');
-                      setValue('');
-                    }}
-                  >
-                    <Check
-                      className={`mr-2 h-4 w-4 ${
-                        value === list.name ? 'opacity-100' : 'opacity-0'
-                      }`}
-                    />
-                    {list.name}
-                  </CommandItem>
-                ))
-              ) : (
-                <div>No lists found.</div>
-              )}
-            </CommandList>
-            <CommandSeparator />
-            <CommandItem
-              onSelect={() => {
-                setOpen(false);
-                setShowCard(true);
-              }}
-              className="mt-1"
-            >
-              <PlusCircle className="mr-2 h-4 w-4" />
-              <span>Create New List</span>
-            </CommandItem>
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-[200px]">
+        <DropdownMenuLabel>My Lists</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {todoLists.map((list) => (
+          <div key={list.id}>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger
+                key={list.id}
+                className="flex items-center m-2"
+              >
+                <Check
+                  className={`mr-2 h-4 w-4 ${
+                    value === list.name ? 'opacity-100' : 'opacity-0'
+                  } `}
+                />
+                <span
+                  onSelect={() => {
+                    changeActiveList(list.id);
+                    setOpen(false);
+                    setInputValue('');
+                    setValue('');
+                  }}
+                >
+                  {list.name}
+                </span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem
+                  className="m-2 text-sm outline-none select-none"
+                  onSelect={() => {
+                    changeActiveList(list.id);
+                    setOpen(false);
+                    setInputValue('');
+                    setValue('');
+                  }}
+                >
+                  <span>Use List</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={() => {
+                    setShowRenameCard(true);
+                    setRenameList(list.name);
+                    setRenameListId(list.id);
+                  }}
+                  className="m-2 text-sm outline-none select-none"
+                >
+                  <span>Rename List</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="m-2 text-sm text-red-500 outline-none select-none"
+                  onSelect={() => {
+                    deleteTodoList(list.id);
+                    setOpen(false);
+                  }}
+                >
+                  <span>Delete List</span>
+                </DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+          </div>
+        ))}
+
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onSelect={() => {
+            setOpen(false);
+            setShowCreateCard(true);
+          }}
+          className="flex items-center m-2 outline-none select-none cursor-pointer"
+        >
+          <PlusCircle className="mr-2 h-4 w-4" />
+          <span>Create New List</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

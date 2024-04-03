@@ -98,6 +98,21 @@ function useTodoList(initialTodos: Todo[] = []) {
     setTodoLists(updatedLists);
   };
 
+  const renameTodoList = (id: string, newName: string): void => {
+    const updatedTodoLists = [...todoLists];
+    const todoListIndex = updatedTodoLists.findIndex((t) => t.id === id);
+    updatedTodoLists[todoListIndex].name = newName;
+    setTodoLists(updatedTodoLists);
+  };
+
+  const deleteTodoList = (id: string): void => {
+    const updatedTodoLists = todoLists.filter((list) => list.id !== id);
+    setTodoLists(updatedTodoLists);
+    if (updatedTodoLists.length > 0) {
+      setCurrentListId(updatedTodoLists[0].id);
+    }
+  };
+
   // Function to add a new todo
   const addTodo = (title: string) => {
     const newTodo: Todo = {
@@ -287,6 +302,8 @@ function useTodoList(initialTodos: Todo[] = []) {
     sortingTodo,
     setSortingTodo,
     sortIndividualTodo,
+    renameTodoList,
+    deleteTodoList,
   };
 }
 

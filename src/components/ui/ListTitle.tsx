@@ -13,6 +13,8 @@ interface ListTitleProps {
   todos: Todo[];
   completedTodos: Todo[];
   setMode: (mode: string) => void;
+  renameTodoList: (listId: string, name: string) => void;
+  deleteTodoList: (listId: string) => void;
 }
 
 function ListTitle({
@@ -23,6 +25,8 @@ function ListTitle({
   todos,
   completedTodos,
   setMode,
+  renameTodoList,
+  deleteTodoList,
 }: ListTitleProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [open, setOpen] = useState(false);
@@ -73,6 +77,8 @@ function ListTitle({
             currentListId={currentListId}
             open={open}
             setOpen={setOpen}
+            renameTodoList={renameTodoList}
+            deleteTodoList={deleteTodoList}
           />
         </div>
       </div>

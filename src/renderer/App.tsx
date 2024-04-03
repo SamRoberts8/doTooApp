@@ -29,6 +29,8 @@ function Home() {
     setMode,
     sortIndividualTodo,
     sortingTodo,
+    renameTodoList,
+    deleteTodoList,
   } = useTodoList();
 
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
@@ -132,6 +134,8 @@ function Home() {
             todos={todos}
             completedTodos={completedTodos}
             setMode={setMode}
+            renameTodoList={renameTodoList}
+            deleteTodoList={deleteTodoList}
           />
         </div>
       </div>
