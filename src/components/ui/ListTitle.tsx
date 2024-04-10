@@ -82,9 +82,9 @@ function ListTitle({
           />
         </div>
       </div>
-      <h2 className="text-gray-500  text-sm mt-1">
+      <h2 className="text-gray-900  text-sm mt-1">
         <span
-          className="cursor-pointer hover:underline"
+          className="cursor-pointer opacity-70 hover:underline"
           onClick={() => setMode('view')}
         >
           {todosLength} doToos,
@@ -92,7 +92,7 @@ function ListTitle({
         <HoverCard>
           <HoverCardTrigger>
             <span
-              className="cursor-pointer hover:underline"
+              className="cursor-pointer opacity-70 hover:underline"
               onClick={() => setMode('completed')}
             >
               {completedTodoTodayLength} completed today.

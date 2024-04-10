@@ -153,7 +153,7 @@ app.on('ready', () => {
     if (height === 0) {
       return;
     }
-    const { width } = mainWindow!.getBounds(); // Get current width
+    const width = 400; // Get current width
     const windowFrameHeight = 0; // Adjust based on your OS and window decoration
     mainWindow?.setSize(width, height + windowFrameHeight); // Set new height
     mainWindow!.setWindowButtonVisibility(false);

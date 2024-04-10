@@ -25,6 +25,18 @@ import {
   DropdownMenuItem,
 } from './dropdown-menu';
 
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogCancel,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction,
+} from './alert-dialog';
+
 import CreateCardPopUp from './CreateCardPopUp';
 
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
@@ -32,6 +44,7 @@ import { Popover, PopoverContent, PopoverTrigger } from './popover';
 import { Todos } from '../types';
 
 import RenameCardPopUp from './RenameCardPopUp';
+import DeleteCardPopUp from './DeleteCardPopUp';
 
 interface ListDropDownProps {
   isHovered: boolean;
@@ -65,6 +78,9 @@ const ListDropDown: React.FC<ListDropDownProps> = ({
   const [showRenameCard, setShowRenameCard] = useState(false);
   const [renameList, setRenameList] = useState('');
   const [renameListId, setRenameListId] = useState('');
+  const [showDeleteCard, setShowDeleteCard] = useState(false);
+  const [deleteList, setDeleteList] = useState('');
+  const [deleteListId, setDeleteListId] = useState('');
 
   const currentList = todoLists.find((list) => list.id === currentListId);
   const listName = currentList ? currentList.name : '';
@@ -89,6 +105,17 @@ const ListDropDown: React.FC<ListDropDownProps> = ({
         listName={renameList}
         listId={renameListId}
         renameTodoList={renameTodoList}
+      />
+    );
+  }
+
+  if (showDeleteCard) {
+    return (
+      <DeleteCardPopUp
+        setShowCard={setShowDeleteCard}
+        listName={deleteList}
+        listId={deleteListId}
+        deleteTodoList={deleteTodoList}
       />
     );
   }
@@ -157,7 +184,9 @@ const ListDropDown: React.FC<ListDropDownProps> = ({
                 <DropdownMenuItem
                   className="m-2 text-sm text-red-500 outline-none select-none"
                   onSelect={() => {
-                    deleteTodoList(list.id);
+                    setShowDeleteCard(true);
+                    setDeleteList(list.name);
+                    setDeleteListId(list.id);
                     setOpen(false);
                   }}
                 >

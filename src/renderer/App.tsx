@@ -89,7 +89,9 @@ function Home() {
   };
 
   ipcRenderer.on('trigger-resize-focus', (event) => {
-    sendDivHeight();
+    if (todos.length > 0) {
+      sendDivHeight();
+    }
   });
 
   useEffect(() => {

@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import { Todo } from './types';
 import Rive from '@rive-app/react-canvas';
@@ -31,17 +33,16 @@ const TodoItem: React.FC<TodoItemProps> = ({
   return (
     <li className="group -z-10">
       <div id="todo-single">
-        <div
-          className="flex items-center justify-between  gap-4 relative "
-          onMouseEnter={() => setIsHover(true)}
-          onMouseLeave={() => setIsHover(false)}
-        >
-          <div className="flex gap-4 min-h-10 items-center">
+        <div className="flex items-center justify-between min-h-10 gap-4 relative my-5 ">
+          <div className="flex gap-4 items-center">
             <div
-              className="border-gray-800 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center"
+              className="border-gray-800 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center hover:bg-gray-900 cursor-pointer "
               onClick={() => completeTodo(todo.id)}
+              onMouseEnter={() => setIsHover(true)}
+              onMouseLeave={() => setIsHover(false)}
             >
               <Check
+                color="white"
                 className={isHover ? 'opacity-100' : 'opacity-0'}
                 size={14}
               />
@@ -52,14 +53,6 @@ const TodoItem: React.FC<TodoItemProps> = ({
               </p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() => sortIndividualTodo(todo)}
-            className="hidden h-8 px-4 py-1 text-sm bg-gray-800 text-white rounded-md group-hover:flex absolute right-0 items-center justify-center"
-          >
-            Sort
-          </button>
-          {todo.sorted ? '' : <AlertIcon />}
         </div>
       </div>
       {todo === lastTodo ? (

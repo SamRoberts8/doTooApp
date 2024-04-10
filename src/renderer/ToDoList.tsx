@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useRef, useEffect } from 'react';
 import Rive from '@rive-app/react-canvas';
 import confettiAnimation from './confetti.riv';
@@ -74,17 +76,16 @@ const TodoItem: React.FC<TodoItemProps> = ({
     <li id={todo.id} className="group -z-10">
       <ContextMenu>
         <ContextMenuTrigger>
-          <div
-            className="flex items-center justify-between min-h-10 gap-4 relative my-5 "
-            onMouseEnter={() => setIsHover(true)}
-            onMouseLeave={() => setIsHover(false)}
-          >
+          <div className="flex items-center justify-between min-h-10 gap-4 relative my-5 ">
             <div className="flex gap-4 items-center">
               <div
-                className="border-gray-800 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center"
+                className="border-gray-800 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center hover:bg-gray-900  cursor-pointer"
                 onClick={() => completeTodo(todo.id)}
+                onMouseEnter={() => setIsHover(true)}
+                onMouseLeave={() => setIsHover(false)}
               >
                 <Check
+                  color="white"
                   className={isHover ? 'opacity-100' : 'opacity-0'}
                   size={14}
                 />
@@ -177,7 +178,7 @@ function ToDoList({
   };
 
   return (
-    <div className="mx-8 mt-6 overflow-auto  shrink min-h-0 min-w-0">
+    <div className="mx-8 mt-2 overflow-auto shrink min-h-0 min-w-0">
       {showConfetti ? (
         <div
           className="fixed inset-0 z-50 flex justify-center items-center pointer-events-none"
