@@ -24,20 +24,22 @@ const SortSection: React.FC<SortSectionProps> = ({
   return (
     <div className="my-4  mx-8 h-[338px] ">
       <div>
-        <p className="text-sm text-gray-400">Sorting</p>
-        <p className="text-lg font-semibold text-gray-900">
+        <p className="text-sm text-gray-400 dark:text-gray-300">Sorting</p>
+        <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
           {sortingTodo.title}
         </p>
       </div>
       <div className="my-4 w-80 break-all">
-        <p className="text-sm text-gray-400">Do after or before than...</p>
-        <p className="text-lg font-semibold text-gray-900 ">
+        <p className="text-sm text-gray-400 dark:text-gray-300">
+          Do after or before than...
+        </p>
+        <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
           {comparingTodo.title}
         </p>
       </div>
       <div className="flex w-full justify-start gap-2">
         <button
-          className="w-full px-4 py-3 border border-gray-600 text-gray-900 rounded-md flex-grow max-w-60"
+          className="w-full px-4 py-3 border border-gray-600 text-gray-900 rounded-md flex-grow max-w-60 dark:dark:text-gray-100 dark:border-gray-100"
           type="button"
           onClick={() => handleSortClick('after')}
         >

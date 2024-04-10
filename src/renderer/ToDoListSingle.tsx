@@ -30,25 +30,29 @@ const TodoItem: React.FC<TodoItemProps> = ({
     triggerConfetti();
   };
 
+  const isDarkModeEnabled = window.matchMedia(
+    '(prefers-color-scheme: dark)',
+  ).matches;
+
   return (
     <li className="group -z-10">
       <div id="todo-single">
         <div className="flex items-center justify-between min-h-10 gap-4 relative my-5 ">
           <div className="flex gap-4 items-center">
             <div
-              className="border-gray-800 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center hover:bg-gray-900 cursor-pointer "
+              className="border-gray-800 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center hover:bg-gray-900 cursor-pointer dark:border-gray-100 dark:hover:bg-gray-100"
               onClick={() => completeTodo(todo.id)}
               onMouseEnter={() => setIsHover(true)}
               onMouseLeave={() => setIsHover(false)}
             >
               <Check
-                color="white"
+                color={isDarkModeEnabled ? 'black' : 'white'}
                 className={isHover ? 'opacity-100' : 'opacity-0'}
                 size={14}
               />
             </div>
             <div className="flex flex-col w-56">
-              <p className="font-medium  text-gray-800 break-words">
+              <p className="font-medium  text-gray-800 break-words dark:text-gray-100">
                 {todo.title}
               </p>
             </div>

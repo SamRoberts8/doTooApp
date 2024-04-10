@@ -53,21 +53,21 @@ function CompletedSection({ completedTodos }: CompletedSectionProps) {
 
         return (
           <div key={date}>
-            <div className="font-bold ">{date}</div>
-            <div className="text-xs  text-gray-500 mt-1">
+            <div className="font-bold dark:text-gray-100">{date}</div>
+            <div className="text-xs  text-gray-500 mt-1 dark:text-gray-100">
               {todosLength} completed
-              <div className="mt-2 mb-4  border-b  border-gray-800 opacity-10" />
+              <div className="mt-2 mb-4  border-b  border-gray-800 opacity-10 dark:border-gray-100" />
             </div>
             {todos.map((todo) => (
               <div key={todo.id} className="rounded-md p-2 overflow-hidden ">
-                <div className="flex flex-col  justify-start">
+                <div className="flex flex-col  justify-start dark:text-gray-100">
                   <div>{todo.title}</div>
-                  <div className="text-xs  text-gray-500 mt-2">
+                  <div className="text-xs  text-gray-500 mt-2 dark:text-gray-300">
                     {todo.completedAt
                       ? format(parseISO(todo.completedAt.toString()), 'p')
                       : ''}
                   </div>
-                  <div className="mt-2 mb-2  border-b  border-gray-800 opacity-10" />
+                  <div className="mt-2 mb-2  border-b  border-gray-800 opacity-10 dark:border-gray-100" />
                 </div>
               </div>
             ))}

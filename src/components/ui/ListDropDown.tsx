@@ -120,16 +120,24 @@ const ListDropDown: React.FC<ListDropDownProps> = ({
     );
   }
 
+  const isDarkModeEnabled = window.matchMedia(
+    '(prefers-color-scheme: dark)',
+  ).matches;
+
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger className="outline-none">
         <Button
-          variant="ghost"
+          // variant="destructive"
+          className="bg-gray-100 dark:bg-neutral-700"
           role="combobox"
           aria-expanded={open}
-          style={{ opacity: isHovered || isOpen ? 1 : 0 }}
+          style={{ opacity: isHovered || open ? 1 : 0 }}
         >
-          <ChevronDown className=" shrink-0 " />
+          <ChevronDown
+            color={isDarkModeEnabled ? 'white' : 'black'}
+            className=" shrink-0 "
+          />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[200px]">

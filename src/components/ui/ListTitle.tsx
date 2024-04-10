@@ -64,7 +64,10 @@ function ListTitle({
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex flex-row">
-        <h1 className="text-2xl font-bold" onClick={() => setOpen(!open)}>
+        <h1
+          className="text-2xl font-bold dark:text-gray-100"
+          onClick={() => setOpen(!open)}
+        >
           {listName}
         </h1>
         <div className="ml-2">
@@ -82,9 +85,9 @@ function ListTitle({
           />
         </div>
       </div>
-      <h2 className="text-gray-900  text-sm mt-1">
+      <h2 className="text-gray-900  text-sm mt-1 dark:text-gray-100">
         <span
-          className="cursor-pointer opacity-70 hover:underline"
+          className="cursor-pointer opacity-70 hover:underline "
           onClick={() => setMode('view')}
         >
           {todosLength} doToos,

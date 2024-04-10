@@ -104,7 +104,7 @@ function Home() {
     const todosJustFirst = todos.slice(0, 1);
     return (
       <div className="overflow-visible select-none  flex  justify-center items-center h-screen ">
-        <div className="w-22 ">
+        <div className="w-22 dark:text-gray-100">
           <NavBar title="Current:" height="" marginTop="" />
         </div>
 

@@ -72,6 +72,10 @@ const TodoItem: React.FC<TodoItemProps> = ({
     }
   };
 
+  const isDarkModeEnabled = window.matchMedia(
+    '(prefers-color-scheme: dark)',
+  ).matches;
+
   return (
     <li id={todo.id} className="group -z-10">
       <ContextMenu>
@@ -79,13 +83,13 @@ const TodoItem: React.FC<TodoItemProps> = ({
           <div className="flex items-center justify-between min-h-10 gap-4 relative my-5 ">
             <div className="flex gap-4 items-center">
               <div
-                className="border-gray-800 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center hover:bg-gray-900  cursor-pointer"
+                className="border-gray-800 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center hover:bg-gray-900  cursor-pointer dark:border-gray-100 dark:hover:bg-gray-100"
                 onClick={() => completeTodo(todo.id)}
                 onMouseEnter={() => setIsHover(true)}
                 onMouseLeave={() => setIsHover(false)}
               >
                 <Check
-                  color="white"
+                  color={isDarkModeEnabled ? 'black' : 'white'}
                   className={isHover ? 'opacity-100' : 'opacity-0'}
                   size={14}
                 />
@@ -100,10 +104,10 @@ const TodoItem: React.FC<TodoItemProps> = ({
                     onKeyDown={handleTitleSubmit}
                     onBlur={handleTitleSubmit}
                     onFocus={(e) => e.target.select()}
-                    className="form-input font-medium text-gray-800 break-words bg-transparent focus:outline-none"
+                    className="form-input font-medium text-gray-800 break-words bg-transparent focus:outline-none dark:text-gray-100"
                   />
                 ) : (
-                  <p className="font-medium text-gray-800 break-words ">
+                  <p className="font-medium text-gray-800 break-words dark:text-gray-100 ">
                     {todo.title}
                   </p>
                 )}
@@ -112,7 +116,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
             <button
               type="button"
               onClick={() => sortIndividualTodo(todo)}
-              className="hidden h-8 px-4 py-1 text-sm bg-gray-800 text-white rounded-md group-hover:flex absolute right-0 mr-2  items-center justify-center"
+              className="hidden h-8 px-4 py-1 text-sm bg-gray-800 text-white rounded-md group-hover:flex absolute right-0 mr-2  items-center justify-center dark:bg-gray-200 dark:text-gray-800"
             >
               Sort
             </button>
@@ -137,7 +141,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
       {todo === lastTodo ? (
         ''
       ) : (
-        <div className="mt-2 mb-4  border-b  border-gray-800 opacity-10" />
+        <div className="mt-2 mb-4  border-b  border-gray-800 opacity-10 dark:border-gray-100" />
       )}
     </li>
   );
