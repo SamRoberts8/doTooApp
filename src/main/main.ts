@@ -10,7 +10,14 @@
  */
 import path from 'path';
 import { writeFile, readFile } from 'fs';
-import { app, BrowserWindow, shell, ipcMain, globalShortcut } from 'electron';
+import {
+  app,
+  BrowserWindow,
+  shell,
+  ipcMain,
+  globalShortcut,
+  screen,
+} from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -148,6 +155,29 @@ app
   })
   .catch(console.log);
 
+const calculateNewHeightForOnScreenWindow = (
+  window: BrowserWindow,
+  increaseBy: number,
+): number => {
+  const windowBounds = window.getBounds();
+  const newHeight = windowBounds.height + increaseBy;
+  const newBottomEdgePosition = windowBounds.y + newHeight;
+
+  const currentDisplay = screen.getDisplayNearestPoint({
+    x: windowBounds.x,
+    y: windowBounds.y,
+  });
+
+  const maxAllowedYPosition =
+    currentDisplay.workArea.y + currentDisplay.workArea.height;
+
+  if (newBottomEdgePosition > maxAllowedYPosition) {
+    return maxAllowedYPosition - 475;
+  }
+
+  return windowBounds.y;
+};
+
 app.on('ready', () => {
   ipcMain.on('resize-window-focus', (event, height) => {
     if (height === 0) {
@@ -195,11 +225,22 @@ app.on('ready', () => {
   }
 
   const retg = globalShortcut.register('CommandOrControl+Alt+G', () => {
-    console.log('Command + Option + G is pressed');
-    mainWindow?.setSize(400, 450);
-    // Your action goes here. For example, opening a specific app window or executing a particular function.
+    if (!mainWindow) {
+      return;
+    }
 
-    // Send a message to the renderer process
+    const newWindowYPosition = calculateNewHeightForOnScreenWindow(
+      mainWindow!,
+      450,
+    );
+    const windowBounds = mainWindow.getBounds();
+
+    mainWindow.setBounds({
+      x: windowBounds.x,
+      y: newWindowYPosition,
+      width: 400,
+      height: 450,
+    });
   });
 
   if (!retg) {
