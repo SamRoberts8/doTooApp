@@ -31,6 +31,18 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const messageHandler = () => {
+      setIsInputVisible(true);
+    };
+
+    ipcRenderer.on('global-shortcut', messageHandler);
+
+    return () => {
+      ipcRenderer.removeListener('global-shortcut', messageHandler);
+    };
+  }, []);
+
   const handleButtonClick = () => {
     setIsInputVisible(true);
   };

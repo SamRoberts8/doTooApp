@@ -60,7 +60,7 @@ function ListTitle({
   const completedTodoAllTimeLenght = completedTodos.length;
 
   return (
-    <div className="w-[80%]">
+    <div className="w-full">
       <div
         className="flex flex-row"
         onMouseEnter={() => setIsHovered(true)}
@@ -113,7 +113,7 @@ function ListTitle({
             </HoverCardContent>
           </HoverCard>
         </h2>
-        <Search size={18} />
+        <Search className="mr-1" size={18} />
       </div>
     </div>
   );
