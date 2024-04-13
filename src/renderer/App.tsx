@@ -127,7 +127,7 @@ function Home() {
     <div className="overflow-visible select-none  flex flex-col  h-screen">
       <div className="flex-none z-10 pb-2">
         <NavBar title={''} height="h-12" marginTop="mt-4" />
-        <div className=" mx-8 flex  mr-14 ">
+        <div className=" mx-8 flex mr-14 w-[100%] ">
           <ListTitle
             todoLists={todoLists}
             currentListId={currentListId}
