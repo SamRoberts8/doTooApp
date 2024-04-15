@@ -124,21 +124,24 @@ const ListDropDown: React.FC<ListDropDownProps> = ({
     '(prefers-color-scheme: dark)',
   ).matches;
 
+  let triggerOpacity = 0;
+  if (isHovered || open) {
+    triggerOpacity = isDarkModeEnabled ? 0.2 : 1;
+  }
+
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger className="outline-none">
-        <Button
-          // variant="destructive"
-          className="bg-gray-100 dark:bg-neutral-700"
-          role="combobox"
+        <div
+          className="bg-gray-100 dark:bg-neutral-700  mt-2 px-2 py-0.5 rounded-md "
           aria-expanded={open}
-          style={{ opacity: isHovered || open ? 1 : 0 }}
+          style={{ opacity: triggerOpacity }}
         >
           <ChevronDown
             color={isDarkModeEnabled ? 'white' : 'black'}
             className=" shrink-0 "
           />
-        </Button>
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[200px]">
         <DropdownMenuLabel>My Lists</DropdownMenuLabel>

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ListDropDown from './ListDropDown';
 import { Todo, TodoList } from '../../renderer/types';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from './hover-card';
@@ -32,6 +32,25 @@ function ListTitle({
 }: ListTitleProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [open, setOpen] = useState(false);
+  const [isDarkModeEnabled, setIsDarkModeEnabled] = useState(
+    window.matchMedia('(prefers-color-scheme: dark)').matches,
+  );
+
+  useEffect(() => {
+    const handleDarkModeChange = (event: MediaQueryListEvent) => {
+      setIsDarkModeEnabled(event.matches);
+    };
+
+    const darkModeMediaQuery = window.matchMedia(
+      '(prefers-color-scheme: dark)',
+    );
+
+    darkModeMediaQuery.addEventListener('change', handleDarkModeChange);
+    return () => {
+      darkModeMediaQuery.removeEventListener('change', handleDarkModeChange);
+    };
+  }, []);
+
   const currentList = todoLists.find((list) => list.id === currentListId);
   const listName = currentList ? currentList.name : '';
 
@@ -63,7 +82,7 @@ function ListTitle({
   return (
     <div className="w-full">
       <div
-        className="flex flex-row"
+        className="flex flex-row items-center"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -118,7 +137,11 @@ function ListTitle({
           whileHover={{ scale: [null, 1.5, 1.4] }}
           transition={{ duration: 0.3 }}
         >
-          <Search className="mr-1" size={18} />
+          <Search
+            className="mr-1"
+            size={18}
+            color={isDarkModeEnabled ? 'white' : 'black'}
+          />
         </motion.div>
       </div>
     </div>

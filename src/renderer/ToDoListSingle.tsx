@@ -6,6 +6,7 @@ import Rive from '@rive-app/react-canvas';
 import confettiAnimation from './confetti.riv';
 import AlertIcon from './icons/AlertIcon';
 import { Check } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface TodoItemProps {
   todo: Todo;
@@ -39,18 +40,20 @@ const TodoItem: React.FC<TodoItemProps> = ({
       <div id="todo-single">
         <div className="flex items-center justify-between min-h-10 gap-4 relative my-5 ">
           <div className="flex gap-4 items-center">
-            <div
-              className="border-gray-800 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center hover:bg-gray-900 cursor-pointer dark:border-gray-100 dark:hover:bg-gray-100"
+            <motion.div
+              className="border-gray-800  ml-2 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center hover:bg-gray-900 cursor-pointer dark:border-gray-100 dark:hover:bg-gray-100"
               onClick={() => completeTodo(todo.id)}
               onMouseEnter={() => setIsHover(true)}
               onMouseLeave={() => setIsHover(false)}
+              whileHover={{ scale: [null, 1.5, 1.4] }}
+              transition={{ duration: 0.3 }}
             >
               <Check
                 color={isDarkModeEnabled ? 'black' : 'white'}
                 className={isHover ? 'opacity-100' : 'opacity-0'}
                 size={14}
               />
-            </div>
+            </motion.div>
             <div className="flex flex-col w-56">
               <p className="font-medium  text-gray-800 break-words dark:text-gray-100">
                 {todo.title}
