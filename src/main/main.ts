@@ -201,7 +201,18 @@ app.on('ready', () => {
     console.log('Command + Option + M is pressed');
 
     if (mainWindow && mainWindow?.getSize()[1] < 200) {
-      mainWindow?.setSize(400, 450);
+      const newWindowYPosition = calculateNewHeightForOnScreenWindow(
+        mainWindow!,
+        450,
+      );
+      const windowBounds = mainWindow.getBounds();
+
+      mainWindow.setBounds({
+        x: windowBounds.x,
+        y: newWindowYPosition,
+        width: 400,
+        height: 450,
+      });
     }
 
     mainWindow?.webContents.send('global-shortcut', 'Command + Option + M');
@@ -229,18 +240,20 @@ app.on('ready', () => {
       return;
     }
 
-    const newWindowYPosition = calculateNewHeightForOnScreenWindow(
-      mainWindow!,
-      450,
-    );
-    const windowBounds = mainWindow.getBounds();
+    if (mainWindow.getSize()[1] < 200) {
+      const newWindowYPosition = calculateNewHeightForOnScreenWindow(
+        mainWindow!,
+        450,
+      );
+      const windowBounds = mainWindow.getBounds();
 
-    mainWindow.setBounds({
-      x: windowBounds.x,
-      y: newWindowYPosition,
-      width: 400,
-      height: 450,
-    });
+      mainWindow.setBounds({
+        x: windowBounds.x,
+        y: newWindowYPosition,
+        width: 400,
+        height: 450,
+      });
+    }
   });
 
   if (!retg) {

@@ -9,6 +9,7 @@ import CompletedSection from './CompletedSection';
 import SortSection from './SortSection';
 import ListTitle from '../components/ui/ListTitle.tsx';
 import { ipcRenderer } from 'electron';
+import { AnimatePresence } from 'framer-motion';
 
 function Home() {
   const {

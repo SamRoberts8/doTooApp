@@ -5,6 +5,7 @@ import ListDropDown from './ListDropDown';
 import { Todo, TodoList } from '../../renderer/types';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from './hover-card';
 import { Search } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface ListTitleProps {
   todoLists: TodoList[];
@@ -113,7 +114,12 @@ function ListTitle({
             </HoverCardContent>
           </HoverCard>
         </h2>
-        <Search className="mr-1" size={18} />
+        <motion.div
+          whileHover={{ scale: [null, 1.5, 1.4] }}
+          transition={{ duration: 0.3 }}
+        >
+          <Search className="mr-1" size={18} />
+        </motion.div>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
 /* eslint-disable react/function-component-definition */
 import React, { useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import { CirclePlus } from 'lucide-react';
 
@@ -64,69 +65,85 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
     setIsInputVisible(false);
   };
 
-  if (isInputVisible) {
-    return (
-      <div className="  mx-7  mb-4 flex flex-col gap-4 items-center rounded-md ">
-        <input
-          className="rounded-md text-gray-900 w-full  border-gray-800 bg-opacity-30 p-3 outline-none "
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              handleInputSubmit();
-            }
-            if (event.key === 'Escape') {
-              handleInputCancel();
-            }
-          }}
-          autoFocus
-          placeholder="Task name"
-        />
-        <div className="flex w-full justify-between gap-2">
-          <button
-            className="w-full px-4 py-3 border border-gray-600 text-gray-900 rounded-md flex-grow dark:text-gray-100 dark:border-gray-100"
-            type="button"
-            onClick={handleInputCancel}
-          >
-            Cancel
-          </button>
-          <button
-            className="w-full px-4 py-3 bg-gray-900 text-white rounded-md flex-grow dark:bg-gray-200 dark:text-gray-800"
-            type="button"
-            onClick={handleInputSubmit}
-          >
-            Add
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className=" w-screen  z-0  border-t  border-gray-800 border-opacity-10 flex-none dark:border-gray-500 ">
-      <div className="p-2">
-        <div
-          className=" mx-7 p-2 flex gap-4 items-center cursor-pointer rounded-md"
-          onClick={handleButtonClick}
-          role="button"
-          tabIndex={0}
-          aria-label="Add new todo"
-          onKeyDown={(event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              handleButtonClick();
-            }
-          }}
+    <AnimatePresence mode="wait">
+      {isInputVisible && (
+        <motion.div
+          key="inputField" // Assign a unique key
+          className="  mx-7  mb-4 flex flex-col gap-4 items-center rounded-md "
+          initial={{ opacity: 0, y: 20 }} // Start from opacity 0 and 20px down
+          animate={{ opacity: 1, y: 0 }} // Animate to full opacity and original position
         >
-          <div>
-            <CirclePlus color={isDarkModeEnabled ? '#F3F4F6' : '#374151'} />
+          <input
+            className="rounded-md text-gray-900 w-full  border-gray-800 bg-opacity-30 p-3 outline-none "
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                handleInputSubmit();
+              }
+              if (event.key === 'Escape') {
+                handleInputCancel();
+              }
+            }}
+            autoFocus
+            placeholder="Task name"
+          />
+          <div className="flex w-full justify-between gap-2">
+            <button
+              className="w-full px-4 py-3 border border-gray-600 text-gray-900 rounded-md flex-grow dark:text-gray-100 dark:border-gray-100"
+              type="button"
+              onClick={handleInputCancel}
+            >
+              Cancel
+            </button>
+            <button
+              className="w-full px-4 py-3 bg-gray-900 text-white rounded-md flex-grow dark:bg-gray-200 dark:text-gray-800"
+              type="button"
+              onClick={handleInputSubmit}
+            >
+              Add
+            </button>
           </div>
-          <div>
-            <p className="text-sm text-gray-600 dark:text-gray-200">Add task</p>
+        </motion.div>
+      )}{' '}
+      {!isInputVisible && (
+        <motion.div
+          className=" w-screen  z-0  border-t  border-gray-800 border-opacity-10 flex-none dark:border-gray-500 "
+          key="inputField2" // Assign a unique key
+          initial={{ opacity: 0, y: 10 }} // Start from opacity 0 and 20px down
+          animate={{ opacity: 1, y: 0 }} // Animate to full opacity and original position
+        >
+          <div className="p-2">
+            <div
+              className=" mx-7 p-2 flex gap-4 items-center cursor-pointer rounded-md"
+              onClick={handleButtonClick}
+              role="button"
+              tabIndex={0}
+              aria-label="Add new todo"
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  handleButtonClick();
+                }
+              }}
+            >
+              <motion.div
+                whileHover={{ scale: [null, 1.2, 1.1] }}
+                transition={{ duration: 0.3 }}
+              >
+                <CirclePlus color={isDarkModeEnabled ? '#F3F4F6' : '#374151'} />
+              </motion.div>
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-200">
+                  Add task
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 
