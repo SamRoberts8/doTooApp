@@ -23,7 +23,6 @@ interface TodoItemProps {
   renameTodo: (id: string, newName: string) => void;
   sortIndividualTodo: (todoToSort: Todo) => void;
   lastTodo: Todo;
-  triggerConfetti: () => void;
 }
 
 // eslint-disable-next-line react/function-component-definition
@@ -34,13 +33,14 @@ const TodoItem: React.FC<TodoItemProps> = ({
   renameTodo,
   sortIndividualTodo,
   lastTodo,
-  triggerConfetti,
 }) => {
   const [isHover, setIsHover] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(todo.title);
+  const [showConfetti, setShowConfetti] = React.useState(false);
 
   const editInputRef = useRef<HTMLInputElement>(null);
+  const checkLocationRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isEditing) {
@@ -54,7 +54,14 @@ const TodoItem: React.FC<TodoItemProps> = ({
 
   const completeTodo = (id: string) => {
     toggleTodo(id);
-    triggerConfetti();
+  };
+
+  const triggerConfettiAndComplete = (id: string) => {
+    setShowConfetti(true);
+    setTimeout(() => {
+      setShowConfetti(false);
+      completeTodo(id);
+    }, 1000);
   };
 
   const toggleEdit = () => {
@@ -77,19 +84,52 @@ const TodoItem: React.FC<TodoItemProps> = ({
     '(prefers-color-scheme: dark)',
   ).matches;
 
+  const checkLocation = checkLocationRef.current?.getBoundingClientRect();
+
+  const checkHeight = checkLocation ? checkLocation?.height : 0;
+  const checkWidth = checkLocation ? checkLocation?.width : 0;
+
+  const confettiSize = 384;
+  const centerPosition = checkLocation
+    ? {
+        left: checkLocation.left + (checkWidth - confettiSize) / 2,
+        top: checkLocation.top + (checkHeight - confettiSize) / 2,
+      }
+    : null;
+
   return (
     <li id={todo.id} className="group -z-10">
+      {showConfetti ? (
+        <div
+          className="fixed inset-0 z-50 pointer-events-none"
+          style={{
+            left: `${centerPosition?.left}px`,
+            top: `${centerPosition?.top}px`,
+          }}
+        >
+          <div className=" w-96 h-96 flex justify-center items-center">
+            <Rive
+              src={confettiAnimation}
+              style={{ width: '100%', height: '100%' }}
+            />
+          </div>
+        </div>
+      ) : (
+        ''
+      )}
       <ContextMenu>
         <ContextMenuTrigger>
           <div className="flex items-center justify-between min-h-10 gap-4 relative my-5 ">
             <div className="flex gap-4 items-center">
               <motion.div
                 className="border-gray-800 ml-2 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center hover:bg-gray-900  cursor-pointer dark:border-gray-100 dark:hover:bg-gray-100"
-                onClick={() => completeTodo(todo.id)}
+                onClick={() => triggerConfettiAndComplete(todo.id)}
+                style={{ opacity: showConfetti ? 0 : 1 }}
                 onMouseEnter={() => setIsHover(true)}
                 onMouseLeave={() => setIsHover(false)}
-                whileHover={{ scale: [null, 1.5, 1.4] }}
+                whileHover={{ scale: [null, 1.4, 1.3] }}
                 transition={{ duration: 0.3 }}
+                ref={checkLocationRef}
               >
                 <Check
                   color={isDarkModeEnabled ? 'black' : 'white'}
@@ -170,38 +210,9 @@ function ToDoList({
   const todosLength = todos.length;
   const lastTodo = todos[todosLength - 1];
   const firstTodo = todos[0];
-  const [showConfetti, setShowConfetti] = React.useState(false);
-
-  const triggerConfetti = () => {
-    setShowConfetti(true);
-    setTimeout(() => {
-      setShowConfetti(false);
-    }, 1000);
-  };
-
-  const rotateRandomly = () => {
-    const rotation = Math.floor(Math.random() * 360);
-    return `rotate(${rotation}deg)`;
-  };
 
   return (
     <div className="mx-8 mt-2 overflow-auto shrink min-h-0 min-w-0">
-      {showConfetti ? (
-        <div
-          className="fixed inset-0 z-50 flex justify-center items-center pointer-events-none"
-          style={{ transform: rotateRandomly() }}
-        >
-          <div className="w-full h-full flex justify-center items-center">
-            <Rive
-              src={confettiAnimation}
-              style={{ width: '100%', height: '100%' }}
-            />
-          </div>
-        </div>
-      ) : (
-        ''
-      )}
-
       <ul>
         {todos.map((todo) =>
           todo.completed ? null : (
@@ -214,7 +225,6 @@ function ToDoList({
               sortIndividualTodo={sortIndividualTodo}
               lastTodo={lastTodo}
               ref={todo.id === firstTodo.id ? ref : null}
-              triggerConfetti={triggerConfetti}
             />
           ),
         )}

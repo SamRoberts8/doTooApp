@@ -45,8 +45,8 @@ const TodoItem: React.FC<TodoItemProps> = ({
               onClick={() => completeTodo(todo.id)}
               onMouseEnter={() => setIsHover(true)}
               onMouseLeave={() => setIsHover(false)}
-              whileHover={{ scale: [null, 1.5, 1.4] }}
-              transition={{ duration: 0.3 }}
+              whileHover={{ scale: [null, 1.4, 1.3] }}
+              transition={{ duration: 0.2 }}
             >
               <Check
                 color={isDarkModeEnabled ? 'black' : 'white'}

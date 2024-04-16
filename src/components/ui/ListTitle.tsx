@@ -134,7 +134,7 @@ function ListTitle({
           </HoverCard>
         </h2>
         <motion.div
-          whileHover={{ scale: [null, 1.5, 1.4] }}
+          whileHover={{ scale: [null, 1.4, 1.3] }}
           transition={{ duration: 0.3 }}
         >
           <Search
