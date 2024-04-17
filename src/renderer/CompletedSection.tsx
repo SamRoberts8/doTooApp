@@ -11,6 +11,8 @@ const groupTodosByCompletedDate = (todos: Todo[]) => {
   const groupedTodos: { [key: string]: Todo[] } = {};
 
   todos.forEach((todo) => {
+    if (!todo.completedAt) return;
+
     const completedAtDate = todo.completedAt
       ? parseISO(todo.completedAt.toString())
       : null;

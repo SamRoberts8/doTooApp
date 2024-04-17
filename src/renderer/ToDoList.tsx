@@ -97,6 +97,11 @@ const TodoItem: React.FC<TodoItemProps> = ({
       }
     : null;
 
+  const variants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+  };
+
   return (
     <li id={todo.id} className="group -z-10">
       {showConfetti ? (
@@ -119,12 +124,16 @@ const TodoItem: React.FC<TodoItemProps> = ({
       )}
       <ContextMenu>
         <ContextMenuTrigger>
-          <div className="flex items-center justify-between min-h-10 gap-4 relative my-3 ">
+          <motion.div
+            className="flex items-center justify-between min-h-10 gap-4 relative my-3 "
+            animate={showConfetti ? 'hidden' : 'visible'}
+            variants={variants}
+          >
             <div className="flex gap-4 items-center">
               <motion.div
                 className="border-gray-800 ml-2 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center hover:bg-gray-900  cursor-pointer dark:border-gray-100 dark:hover:bg-gray-100"
                 onClick={() => triggerConfettiAndComplete(todo.id)}
-                style={{ opacity: showConfetti ? 0 : 1 }}
+                // style={{ opacity: showConfetti ? 0 : 1 }}
                 onMouseEnter={() => setIsHover(true)}
                 onMouseLeave={() => setIsHover(false)}
                 whileHover={{ scale: [null, 1.4, 1.3] }}
@@ -164,7 +173,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
               Sort
             </button>
             {todo.sorted ? '' : <AlertIcon />}
-          </div>
+          </motion.div>
         </ContextMenuTrigger>
         <ContextMenuContent>
           <ContextMenuItem onClick={() => toggleTodo(todo.id)}>
