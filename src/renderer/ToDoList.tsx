@@ -119,7 +119,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
       )}
       <ContextMenu>
         <ContextMenuTrigger>
-          <div className="flex items-center justify-between min-h-10 gap-4 relative my-5 ">
+          <div className="flex items-center justify-between min-h-10 gap-4 relative my-3 ">
             <div className="flex gap-4 items-center">
               <motion.div
                 className="border-gray-800 ml-2 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center hover:bg-gray-900  cursor-pointer dark:border-gray-100 dark:hover:bg-gray-100"
