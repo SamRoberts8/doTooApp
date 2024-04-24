@@ -157,6 +157,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
                     onBlur={handleTitleSubmit}
                     onFocus={(e) => e.target.select()}
                     className="form-input font-medium text-gray-800 break-words bg-transparent focus:outline-none dark:text-gray-100"
+                    spellCheck="true"
                   />
                 ) : (
                   <p className="font-medium text-gray-800 break-words dark:text-gray-100 ">

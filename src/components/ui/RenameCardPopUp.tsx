@@ -62,6 +62,7 @@ function RenameCardPopUp({
                 onKeyDown={handleKeyDown}
                 id="name"
                 placeholder="Name of your List"
+                spellCheck="true"
               />
             </div>
           </div>

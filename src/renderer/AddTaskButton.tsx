@@ -85,6 +85,7 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
           <input
             className="rounded-md text-gray-900 w-full  border-gray-800 bg-opacity-30 p-3 outline-none "
             type="text"
+            spellCheck="true"
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={(event) => {

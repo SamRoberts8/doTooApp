@@ -17,6 +17,8 @@ import {
   ipcMain,
   globalShortcut,
   screen,
+  Menu,
+  MenuItem,
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -96,11 +98,41 @@ const createWindow = async () => {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      spellcheck: true,
     },
   });
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
   mainWindow.setAlwaysOnTop(true, 'status');
+
+  mainWindow.webContents.on('context-menu', (event, params) => {
+    const menu = new Menu();
+
+    // Add each spelling suggestion
+    params.dictionarySuggestions.forEach((suggestion) => {
+      menu.append(
+        new MenuItem({
+          label: suggestion,
+          click: () => mainWindow?.webContents.replaceMisspelling(suggestion),
+        }),
+      );
+    });
+
+    // Allow users to add the misspelled word to the dictionary
+    if (params.misspelledWord) {
+      menu.append(
+        new MenuItem({
+          label: 'Add to dictionary',
+          click: () =>
+            mainWindow?.webContents.session.addWordToSpellCheckerDictionary(
+              params.misspelledWord,
+            ),
+        }),
+      );
+    }
+
+    menu.popup();
+  });
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {

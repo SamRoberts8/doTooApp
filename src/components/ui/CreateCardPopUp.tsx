@@ -58,6 +58,7 @@ function CreateCardPopUp({
                 onKeyDown={handleKeyDown}
                 id="name"
                 placeholder="Name of your List"
+                spellCheck="true"
               />
             </div>
           </div>
