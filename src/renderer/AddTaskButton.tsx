@@ -142,15 +142,15 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
                     forceMount
                   >
                     <DropdownMenuItem onClick={() => handleInputSubmit(0)}>
-                      Add top of list{' '}
+                      Do now (top)
                       <DropdownMenuShortcut>⏎</DropdownMenuShortcut>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleInputSubmit(1)}>
-                      Add second in list
+                      Do soon (second)
                       <DropdownMenuShortcut>⌘⏎</DropdownMenuShortcut>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleInputSubmit(4)}>
-                      Add fifth in list
+                      Do later (fifth)
                       <DropdownMenuShortcut>⌥⌘⏎</DropdownMenuShortcut>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
