@@ -113,8 +113,8 @@ function useTodoList(initialTodos: Todo[] = []) {
     }
   };
 
-  // Function to add a new todo
-  const addTodo = (title: string) => {
+  // Function to add a new todo at a specific index
+  const addTodo = (title: string, index: number) => {
     const newTodo: Todo = {
       id: uuidv4(),
       title,
@@ -126,7 +126,10 @@ function useTodoList(initialTodos: Todo[] = []) {
     };
     const updatedLists = todoLists.map((list) => {
       if (list.id === currentListId) {
-        return { ...list, todos: [newTodo, ...list.todos] };
+        // Copy the existing todos, insert the new todo at the specified index
+        const newTodos = [...list.todos];
+        newTodos.splice(index, 0, newTodo); // Insert the newTodo at the 'index'
+        return { ...list, todos: newTodos };
       }
       return list;
     });

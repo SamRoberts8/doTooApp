@@ -8,7 +8,7 @@ import ToDoListSingle from './ToDoListSingle';
 
 interface TodoSectionProps {
   todos: Todo[];
-  addTodo: (todo: string) => void;
+  addTodo: (todo: string, index: number) => void;
   toggleTodo: (id: number) => void;
   updateTodo: (id: number, newTask: string) => void;
   deleteTodo: (id: number) => void;

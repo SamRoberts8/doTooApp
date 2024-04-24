@@ -3,11 +3,19 @@
 import React, { useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Separator } from '../components/ui/separator';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuShortcut,
+  DropdownMenuItem,
+} from '../components/ui/dropdown-menu';
 
-import { CirclePlus } from 'lucide-react';
+import { PlusIcon, CirclePlus, ChevronUp } from 'lucide-react';
 
 interface AddTaskButtonProps {
-  addTodo: (todo: string) => void;
+  addTodo: (todo: string, index: number) => void;
 }
 
 const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
@@ -52,9 +60,9 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
     setInputValue(event.target.value);
   };
 
-  const handleInputSubmit = () => {
+  const handleInputSubmit = (index: number) => {
     if (inputValue.trim() !== '') {
-      addTodo(inputValue);
+      addTodo(inputValue, index);
       setInputValue('');
       setIsInputVisible(false);
     }
@@ -80,9 +88,18 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                handleInputSubmit();
+              if (event.key === 'Enter' && !event.metaKey && !event.altKey) {
+                handleInputSubmit(0);
               }
+
+              if (event.key === 'Enter' && event.metaKey && !event.altKey) {
+                handleInputSubmit(1);
+              }
+
+              if (event.key === 'Enter' && event.metaKey && event.altKey) {
+                handleInputSubmit(4);
+              }
+
               if (event.key === 'Escape') {
                 handleInputCancel();
               }
@@ -92,19 +109,54 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
           />
           <div className="flex w-full justify-between gap-2">
             <button
-              className="w-full px-4 py-3 border border-gray-600 text-gray-900 rounded-md flex-grow dark:text-gray-100 dark:border-gray-100"
+              className="w-full  border border-gray-600 text-gray-900 rounded-md flex-grow dark:text-gray-100 dark:border-gray-100"
               type="button"
               onClick={handleInputCancel}
             >
               Cancel
             </button>
-            <button
-              className="w-full px-4 py-3 bg-gray-900 text-white rounded-md flex-grow dark:bg-gray-200 dark:text-gray-800"
-              type="button"
-              onClick={handleInputSubmit}
-            >
-              Add
-            </button>
+            <div className="w-full flex-grow flex justify-center bg-gray-900 text-white rounded-md  dark:bg-gray-200 dark:text-gray-800">
+              <button
+                className="w-full px-4 py-3 "
+                type="button"
+                onClick={() => handleInputSubmit(0)}
+              >
+                Add
+              </button>
+              <Separator orientation="vertical" className="bg-gray-400" />
+
+              <div className="bg-gray-900 dark:bg-gray-200 basis-1/3 rounded-md">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="px-2 shadow-none w-full h-full">
+                      <ChevronUp
+                        olor={isDarkModeEnabled ? '#F3F4F6' : '#374151'}
+                        className="h-4 w-4 m-auto"
+                      />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    alignOffset={-5}
+                    className="w-[200px]"
+                    forceMount
+                  >
+                    <DropdownMenuItem onClick={() => handleInputSubmit(0)}>
+                      Add top of list{' '}
+                      <DropdownMenuShortcut>⏎</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleInputSubmit(1)}>
+                      Add second in list
+                      <DropdownMenuShortcut>⌘⏎</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleInputSubmit(4)}>
+                      Add fifth in list
+                      <DropdownMenuShortcut>⌥⌘⏎</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
           </div>
         </motion.div>
       )}{' '}

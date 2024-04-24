@@ -7,7 +7,7 @@ import { Todo } from './types'; // Assuming you have a types file for Todo, if n
 
 interface TodoSectionProps {
   todos: Todo[];
-  addTodo: (todo: string) => void;
+  addTodo: (todo: string, index: number) => void;
   toggleTodo: (id: string) => void;
   updateTodo: (id: string, newTask: string) => void;
   deleteTodo: (id: string) => void;
