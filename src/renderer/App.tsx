@@ -10,6 +10,7 @@ import SortSection from './SortSection';
 import ListTitle from '../components/ui/ListTitle.tsx';
 import { ipcRenderer } from 'electron';
 import { AnimatePresence } from 'framer-motion';
+import { ThemeProvider } from '../components/ui/ThemeProvider';
 
 function Home() {
   const {
@@ -171,10 +172,17 @@ function Home() {
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </Router>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }

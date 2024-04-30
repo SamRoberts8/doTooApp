@@ -83,7 +83,7 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
           animate={{ opacity: 1, y: 0 }} // Animate to full opacity and original position
         >
           <input
-            className="rounded-md text-gray-900 w-full  border-gray-800 bg-opacity-30 p-3 outline-none "
+            className="rounded-md text-gray-900  w-full  border-gray-800 bg-opacity-30 p-3 outline-none dark:text-white "
             type="text"
             spellCheck="true"
             value={inputValue}

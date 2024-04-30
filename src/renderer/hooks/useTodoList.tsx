@@ -121,7 +121,7 @@ function useTodoList(initialTodos: Todo[] = []) {
       description: 'This is a description',
       completed: false,
       sorted: false,
-      createdAt: new Date(),
+      createdAt: new Date().toISOString,
       completedAt: undefined,
     };
     const updatedLists = todoLists.map((list) => {
@@ -145,7 +145,7 @@ function useTodoList(initialTodos: Todo[] = []) {
           if (todo.id === id) {
             const updatedTodo = { ...todo, completed: !todo.completed };
             if (updatedTodo.completed) {
-              updatedTodo.completedAt = new Date();
+              updatedTodo.completedAt = new Date().toISOString();
               setCompletedTodos([updatedTodo, ...completedTodos]);
             } else {
               setCompletedTodos(

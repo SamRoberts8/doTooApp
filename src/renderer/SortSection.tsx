@@ -22,20 +22,22 @@ const SortSection: React.FC<SortSectionProps> = ({
   }
 
   return (
-    <div className="my-4  mx-8 h-[338px] ">
+    <div className="flex flex-col  justify-between my-4 mx-8 h-full ">
       <div>
-        <p className="text-sm text-gray-400 dark:text-gray-300">Sorting</p>
-        <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-          {sortingTodo.title}
-        </p>
-      </div>
-      <div className="my-4 w-80 break-all">
-        <p className="text-sm text-gray-400 dark:text-gray-300">
-          Do after or before than...
-        </p>
-        <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-          {comparingTodo.title}
-        </p>
+        <div>
+          <p className="text-sm text-gray-400 dark:text-gray-300">Sorting</p>
+          <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            {sortingTodo.title}
+          </p>
+        </div>
+        <div className="my-4 w-80 break-all">
+          <p className="text-sm text-gray-400 dark:text-gray-300">
+            Do after or before than...
+          </p>
+          <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            {comparingTodo.title}
+          </p>
+        </div>
       </div>
       <div className="flex w-full justify-start gap-2">
         <button
@@ -45,8 +47,9 @@ const SortSection: React.FC<SortSectionProps> = ({
         >
           After
         </button>
+
         <button
-          className="w-full px-4 py-3 bg-gray-900 text-white rounded-md flex-grow max-w-60"
+          className="w-full px-4 py-3 bg-gray-900 text-white rounded-md flex-grow max-w-60 dark:bg-gray-100 dark:text-gray-800"
           type="button"
           onClick={() => handleSortClick('before')}
         >

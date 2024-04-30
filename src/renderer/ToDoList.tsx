@@ -133,7 +133,6 @@ const TodoItem: React.FC<TodoItemProps> = ({
               <motion.div
                 className="border-gray-800 ml-2 border w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center hover:bg-gray-900  cursor-pointer dark:border-gray-100 dark:hover:bg-gray-100"
                 onClick={() => triggerConfettiAndComplete(todo.id)}
-                // style={{ opacity: showConfetti ? 0 : 1 }}
                 onMouseEnter={() => setIsHover(true)}
                 onMouseLeave={() => setIsHover(false)}
                 whileHover={{ scale: [null, 1.4, 1.3] }}
@@ -176,7 +175,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
             {todo.sorted ? '' : <AlertIcon />}
           </motion.div>
         </ContextMenuTrigger>
-        <ContextMenuContent>
+        <ContextMenuContent spellCheck="true">
           <ContextMenuItem onClick={() => toggleTodo(todo.id)}>
             Complete
           </ContextMenuItem>

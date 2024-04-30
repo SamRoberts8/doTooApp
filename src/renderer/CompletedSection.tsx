@@ -16,6 +16,7 @@ const groupTodosByCompletedDate = (todos: Todo[]) => {
     const completedAtDate = todo.completedAt
       ? parseISO(todo.completedAt.toString())
       : null;
+
     const dateKey = completedAtDate
       ? `${format(completedAtDate, 'MMM d')} · ${format(
           completedAtDate,
