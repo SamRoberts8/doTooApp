@@ -206,6 +206,8 @@ interface ToDoListProps {
   renameTodo: (id: string, newName: string) => void;
   sortIndividualTodo: (todoToSort: Todo) => void;
   ref: React.RefObject<HTMLDivElement>;
+  searchQuery: string;
+  isSearching: boolean;
 }
 
 function ToDoList({
@@ -215,10 +217,38 @@ function ToDoList({
   renameTodo,
   sortIndividualTodo,
   ref,
+  searchQuery,
+  isSearching,
 }: ToDoListProps) {
   const todosLength = todos.length;
   const lastTodo = todos[todosLength - 1];
   const firstTodo = todos[0];
+
+  if (isSearching) {
+    const fuzzyTodos = todos.filter((todo) =>
+      todo.title.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
+    return (
+      <div className="mx-8 mt-2 overflow-auto shrink min-h-0 min-w-0">
+        <ul>
+          {fuzzyTodos.map((todo) =>
+            todo.completed ? null : (
+              <TodoItem
+                key={todo.id}
+                todo={todo}
+                toggleTodo={toggleTodo}
+                deleteTodo={deleteTodo}
+                renameTodo={renameTodo}
+                sortIndividualTodo={sortIndividualTodo}
+                lastTodo={lastTodo}
+                ref={todo.id === firstTodo.id ? ref : null}
+              />
+            ),
+          )}
+        </ul>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-8 mt-2 overflow-auto shrink min-h-0 min-w-0">

@@ -40,6 +40,8 @@ function Home() {
   const [firstTodo, setFirstTodo] = useState(todos[0]);
   const [firstTodoHeight, setFirstTodoHeight] = useState(0);
   const todoSectionRef = useRef<HTMLDivElement>(null);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const handleResize = () => {
@@ -84,9 +86,6 @@ function Home() {
       ipcRenderer.send('resize-window-focus', divHeight);
       setFirstTodoHeight(divHeight);
       setFocusMode(true);
-    } else if (attemptCount < 5) {
-      // If we failed to obtain a valid height, retry after a delay
-      setTimeout(() => sendDivHeight(attemptCount + 1), 1000); // Retry after 1 second
     }
   };
 
@@ -140,6 +139,10 @@ function Home() {
             setMode={setMode}
             renameTodoList={renameTodoList}
             deleteTodoList={deleteTodoList}
+            isSearching={isSearching}
+            setIsSearching={setIsSearching}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
           />
         </div>
       </div>
@@ -154,6 +157,8 @@ function Home() {
           renameTodo={renameTodo}
           sortIndividualTodo={sortIndividualTodo}
           showAddTaskButton={true}
+          searchQuery={searchQuery}
+          isSearching={isSearching}
         />
       ) : mode === 'sort' ? (
         <SortSection

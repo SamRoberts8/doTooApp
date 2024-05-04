@@ -14,6 +14,8 @@ interface TodoSectionProps {
   renameTodo: (id: string, newName: string) => void;
   sortIndividualTodo: (todoToSort: Todo) => void;
   showAddTaskButton: boolean;
+  searchQuery: string;
+  isSearching: boolean;
 }
 
 const TodoSection: React.FC<TodoSectionProps> = ({
@@ -25,6 +27,8 @@ const TodoSection: React.FC<TodoSectionProps> = ({
   renameTodo,
   sortIndividualTodo,
   showAddTaskButton,
+  searchQuery,
+  isSearching,
 }) => {
   return (
     <div className="  flex flex-col h-full justify-between overflow-auto ">
@@ -35,6 +39,8 @@ const TodoSection: React.FC<TodoSectionProps> = ({
         toggleTodo={toggleTodo}
         renameTodo={renameTodo}
         sortIndividualTodo={sortIndividualTodo}
+        searchQuery={searchQuery}
+        isSearching={isSearching}
       />
       {showAddTaskButton && <AddTaskButton addTodo={addTodo} />}
     </div>

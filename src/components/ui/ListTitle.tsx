@@ -17,6 +17,10 @@ interface ListTitleProps {
   setMode: (mode: string) => void;
   renameTodoList: (listId: string, name: string) => void;
   deleteTodoList: (listId: string) => void;
+  isSearching: boolean;
+  setIsSearching: (isSearching: boolean) => void;
+  searchQuery: string;
+  setSearchQuery: (searchQuery: string) => void;
 }
 
 function ListTitle({
@@ -29,6 +33,10 @@ function ListTitle({
   setMode,
   renameTodoList,
   deleteTodoList,
+  isSearching,
+  setIsSearching,
+  searchQuery,
+  setSearchQuery,
 }: ListTitleProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [open, setOpen] = useState(false);
@@ -79,6 +87,12 @@ function ListTitle({
 
   const completedTodoAllTimeLenght = completedTodos.length;
 
+  const searchEscapeKeyDown = (event) => {
+    if (event.keyCode === 27) {
+      setIsSearching(false);
+    }
+  };
+
   return (
     <div className="w-full">
       <div
@@ -107,42 +121,74 @@ function ListTitle({
           />
         </div>
       </div>
-      <div className="flex justify-between w-full items-center">
-        <h2 className="text-gray-900  text-sm mt-1 dark:text-gray-100">
-          <span
-            className="cursor-pointer opacity-70 hover:underline "
-            onClick={() => setMode('view')}
+      <div className="flex justify-between w-full items-center h-8">
+        {!isSearching && (
+          <h2 className="text-gray-900  text-sm mt-1 dark:text-gray-100">
+            <span
+              className="cursor-pointer opacity-70 hover:underline "
+              onClick={() => setMode('view')}
+            >
+              {todosLength} doToos,
+            </span>{' '}
+            <HoverCard>
+              <HoverCardTrigger>
+                <span
+                  className="cursor-pointer opacity-70 hover:underline"
+                  onClick={() => setMode('completed')}
+                >
+                  {completedTodoTodayLength} completed today.
+                </span>
+              </HoverCardTrigger>
+              <HoverCardContent className="my-2">
+                <h3 className="font-bold">Completed Tasks Summary</h3>
+                <p className="mt-2">{completedTodoTodayLength} today.</p>
+                <p className="mt-1">{completedTodoPastWeekLength} past week.</p>
+                <p className="mt-1">
+                  {completedTodoPastMonthLength} past month.
+                </p>
+                <p className="mt-1">{completedTodoAllTimeLenght} all time.</p>
+              </HoverCardContent>
+            </HoverCard>
+          </h2>
+        )}{' '}
+        {isSearching ? (
+          <div className="w-full flex flex-row gap-3 pl-2 py-2 bg-white rounded-md dark:bg-[#3B3B3B]">
+            <input
+              className="grow h-5 outline-none"
+              placeholder="Search for a task..."
+              autoFocus
+              onBlur={() => setIsSearching(!isSearching)}
+              onKeyDown={searchEscapeKeyDown}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <motion.div
+              whileHover={{ scale: [null, 1.4, 1.3] }}
+              transition={{ duration: 0.3 }}
+              className="pr-1"
+            >
+              <Search
+                className="mr-1"
+                size={18}
+                color={isDarkModeEnabled ? 'white' : 'black'}
+                onClick={() => setIsSearching(!isSearching)}
+              />
+            </motion.div>
+          </div>
+        ) : (
+          <motion.div
+            whileHover={{ scale: [null, 1.4, 1.3] }}
+            transition={{ duration: 0.3 }}
+            className="pr-1"
           >
-            {todosLength} doToos,
-          </span>{' '}
-          <HoverCard>
-            <HoverCardTrigger>
-              <span
-                className="cursor-pointer opacity-70 hover:underline"
-                onClick={() => setMode('completed')}
-              >
-                {completedTodoTodayLength} completed today.
-              </span>
-            </HoverCardTrigger>
-            <HoverCardContent className="my-2">
-              <h3 className="font-bold">Completed Tasks Summary</h3>
-              <p className="mt-2">{completedTodoTodayLength} today.</p>
-              <p className="mt-1">{completedTodoPastWeekLength} past week.</p>
-              <p className="mt-1">{completedTodoPastMonthLength} past month.</p>
-              <p className="mt-1">{completedTodoAllTimeLenght} all time.</p>
-            </HoverCardContent>
-          </HoverCard>
-        </h2>
-        <motion.div
-          whileHover={{ scale: [null, 1.4, 1.3] }}
-          transition={{ duration: 0.3 }}
-        >
-          <Search
-            className="mr-1"
-            size={18}
-            color={isDarkModeEnabled ? 'white' : 'black'}
-          />
-        </motion.div>
+            <Search
+              className="mr-1"
+              size={18}
+              color={isDarkModeEnabled ? 'white' : 'black'}
+              onClick={() => setIsSearching(!isSearching)}
+            />
+          </motion.div>
+        )}
       </div>
     </div>
   );
