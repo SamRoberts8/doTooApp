@@ -16,6 +16,11 @@ interface TodoSectionProps {
   showAddTaskButton: boolean;
   searchQuery: string;
   isSearching: boolean;
+  addSubTaskToTodo: (title: string, todoId: string) => void;
+  showAddSubtask: boolean;
+  setShowAddSubtask: (show: boolean) => void;
+  addingSubtaskParentId: string;
+  setAddingSubtaskParentId: (id: string) => void;
 }
 
 const TodoSection: React.FC<TodoSectionProps> = ({
@@ -29,7 +34,13 @@ const TodoSection: React.FC<TodoSectionProps> = ({
   showAddTaskButton,
   searchQuery,
   isSearching,
+  addSubTaskToTodo,
+  showAddSubtask,
+  setShowAddSubtask,
+  addingSubtaskParentId,
+  setAddingSubtaskParentId,
 }) => {
+  console.log(showAddSubtask);
   return (
     <div className="  flex flex-col h-full justify-between overflow-auto ">
       <ToDoList
@@ -41,8 +52,26 @@ const TodoSection: React.FC<TodoSectionProps> = ({
         sortIndividualTodo={sortIndividualTodo}
         searchQuery={searchQuery}
         isSearching={isSearching}
+        setShowAddSubtask={setShowAddSubtask}
+        addSubTaskToTodo={addSubTaskToTodo}
+        setAddingSubtaskParentId={setAddingSubtaskParentId}
       />
-      {showAddTaskButton && <AddTaskButton addTodo={addTodo} />}
+      {(showAddTaskButton && (
+        <AddTaskButton
+          addTodo={addTodo}
+          addSubTaskToTodo={addSubTaskToTodo}
+          addingSubtaskParentId={addingSubtaskParentId}
+          setAddingSubtaskParentId={setAddingSubtaskParentId}
+        />
+      )) ||
+        (showAddSubtask && (
+          <AddTaskButton
+            addTodo={addTodo}
+            addSubTaskToTodo={addSubTaskToTodo}
+            addingSubtaskParentId={addingSubtaskParentId}
+            setAddingSubtaskParentId={setAddingSubtaskParentId}
+          />
+        ))}
     </div>
   );
 };

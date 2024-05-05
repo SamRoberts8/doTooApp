@@ -33,6 +33,7 @@ function Home() {
     sortingTodo,
     renameTodoList,
     deleteTodoList,
+    addSubTaskToTodo,
   } = useTodoList();
 
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
@@ -42,6 +43,8 @@ function Home() {
   const todoSectionRef = useRef<HTMLDivElement>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showAddSubtask, setShowAddSubtask] = useState(false);
+  const [addingSubtaskParentId, setAddingSubtaskParentId] = useState('');
 
   useEffect(() => {
     const handleResize = () => {
@@ -159,6 +162,11 @@ function Home() {
           showAddTaskButton={true}
           searchQuery={searchQuery}
           isSearching={isSearching}
+          addSubTaskToTodo={addSubTaskToTodo}
+          showAddSubtask={showAddSubtask}
+          setShowAddSubtask={setShowAddSubtask}
+          addingSubtaskParentId={addingSubtaskParentId}
+          setAddingSubtaskParentId={setAddingSubtaskParentId}
         />
       ) : mode === 'sort' ? (
         <SortSection

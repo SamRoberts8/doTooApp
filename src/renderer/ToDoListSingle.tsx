@@ -55,7 +55,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
               />
             </motion.div>
             <div className="flex flex-col w-56">
-              <p className="font-medium  text-gray-800 break-words dark:text-gray-100">
+              <p className="font-medium  text-gray-800 break-all dark:text-gray-100">
                 {todo.title}
               </p>
             </div>

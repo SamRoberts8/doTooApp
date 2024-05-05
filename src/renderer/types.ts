@@ -8,6 +8,8 @@ export interface Todo {
   sorted: boolean;
   createdAt: Date;
   completedAt?: Date;
+  subTasks?: Todo[];
+  completedSubTasks?: Todo[];
 }
 
 export interface TodoList {

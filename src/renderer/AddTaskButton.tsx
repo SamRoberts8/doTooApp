@@ -12,13 +12,23 @@ import {
   DropdownMenuItem,
 } from '../components/ui/dropdown-menu';
 
-import { PlusIcon, CirclePlus, ChevronUp } from 'lucide-react';
+import { CirclePlus, ChevronUp } from 'lucide-react';
 
 interface AddTaskButtonProps {
   addTodo: (todo: string, index: number) => void;
+  addSubTaskToTodo: (title: string, todoId: string) => void;
+  addingSubtaskParentId: string;
+  setAddingSubtaskParentId: (id: string) => void;
 }
 
-const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
+const AddTaskButton: React.FC<AddTaskButtonProps> = ({
+  addTodo,
+  createSubtask,
+  todoId,
+  addSubTaskToTodo,
+  addingSubtaskParentId,
+  setAddingSubtaskParentId,
+}) => {
   const [isInputVisible, setIsInputVisible] = useState(false);
   const [isDarkModeEnabled, setIsDarkModeEnabled] = useState(
     window.matchMedia('(prefers-color-scheme: dark)').matches,
@@ -52,6 +62,12 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (addingSubtaskParentId !== '') {
+      setIsInputVisible(true);
+    }
+  }, [addingSubtaskParentId]);
+
   const handleButtonClick = () => {
     setIsInputVisible(true);
   };
@@ -65,17 +81,28 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
       addTodo(inputValue, index);
       setInputValue('');
       setIsInputVisible(false);
+      setAddingSubtaskParentId('');
+    }
+  };
+
+  const handleInputSubmitSubtask = () => {
+    if (inputValue.trim() !== '') {
+      addSubTaskToTodo(inputValue, addingSubtaskParentId);
+      setInputValue('');
+      setIsInputVisible(false);
+      setAddingSubtaskParentId('');
     }
   };
 
   const handleInputCancel = () => {
     setInputValue('');
     setIsInputVisible(false);
+    setAddingSubtaskParentId('');
   };
 
   return (
     <AnimatePresence mode="wait">
-      {isInputVisible && (
+      {isInputVisible && addingSubtaskParentId === '' && (
         <motion.div
           key="inputField" // Assign a unique key
           className="  mx-7  mb-4 flex flex-col gap-4 items-center rounded-md "
@@ -160,7 +187,52 @@ const AddTaskButton: React.FC<AddTaskButtonProps> = ({ addTodo }) => {
             </div>
           </div>
         </motion.div>
-      )}{' '}
+      )}
+      {isInputVisible && addingSubtaskParentId !== '' && (
+        <motion.div
+          key="inputField" // Assign a unique key
+          className="  mx-7  mb-4 flex flex-col gap-4 items-center rounded-md "
+          initial={{ opacity: 0, y: 20 }} // Start from opacity 0 and 20px down
+          animate={{ opacity: 1, y: 0 }} // Animate to full opacity and original position
+        >
+          <input
+            className="rounded-md text-gray-900  w-full  border-gray-800 bg-opacity-30 p-3 outline-none dark:text-white "
+            type="text"
+            spellCheck="true"
+            value={inputValue}
+            onChange={handleInputChange}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                handleInputSubmitSubtask();
+              }
+
+              if (event.key === 'Escape') {
+                handleInputCancel();
+              }
+            }}
+            autoFocus
+            placeholder="Subtask name"
+          />
+          <div className="flex w-full justify-between gap-2">
+            <button
+              className="w-full  border border-gray-600 text-gray-900 rounded-md flex-grow dark:text-gray-100 dark:border-gray-100"
+              type="button"
+              onClick={handleInputCancel}
+            >
+              Cancel
+            </button>
+            <div className="w-full flex-grow flex justify-center bg-gray-900 text-white rounded-md  dark:bg-gray-200 dark:text-gray-800">
+              <button
+                className="w-full px-4 py-3 "
+                type="button"
+                onClick={() => handleInputSubmitSubtask(0)}
+              >
+                Add Subtask
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
       {!isInputVisible && (
         <motion.div
           className=" w-screen  z-0  border-t  border-gray-800 border-opacity-10 flex-none dark:border-gray-500 "

@@ -15,9 +15,8 @@ import {
 } from '../components/ui/context-menu';
 
 import { Todo } from './types';
-import SubTaskItem from './Subtask';
 
-interface TodoItemProps {
+interface SubTaskItemProps {
   todo: Todo;
   toggleTodo: (id: string) => void;
   deleteTodo: (id: string) => void;
@@ -30,7 +29,7 @@ interface TodoItemProps {
 }
 
 // eslint-disable-next-line react/function-component-definition
-const TodoItem: React.FC<TodoItemProps> = ({
+const SubTaskItem: React.FC<TodoItemProps> = ({
   todo,
   toggleTodo,
   deleteTodo,
@@ -137,7 +136,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
       <ContextMenu>
         <ContextMenuTrigger>
           <motion.div
-            className="flex items-center justify-between min-h-10 gap-4 relative my-3 "
+            className="flex items-center justify-between min-h-10 gap-4 relative my-1 "
             animate={showConfetti ? 'hidden' : 'visible'}
             variants={variants}
           >
@@ -179,14 +178,6 @@ const TodoItem: React.FC<TodoItemProps> = ({
                 )}
               </div>
             </div>
-            <button
-              type="button"
-              onClick={() => sortIndividualTodo(todo)}
-              className="hidden h-8 px-4 py-1 text-sm bg-gray-800 text-white rounded-md group-hover:flex absolute right-0 mr-2  items-center justify-center dark:bg-gray-200 dark:text-gray-800"
-            >
-              Sort
-            </button>
-            {todo.sorted ? '' : <AlertIcon />}
           </motion.div>
         </ContextMenuTrigger>
         <ContextMenuContent spellCheck="true">
@@ -194,9 +185,6 @@ const TodoItem: React.FC<TodoItemProps> = ({
             Complete
           </ContextMenuItem>
           <ContextMenuItem onClick={toggleEdit}>Rename</ContextMenuItem>
-          <ContextMenuItem onClick={() => handleSubstaskClick(todo.id)}>
-            Add Subtask
-          </ContextMenuItem>
           <ContextMenuSeparator />
           <ContextMenuItem
             onClick={() => deleteTodo(todo.id)}
@@ -207,32 +195,6 @@ const TodoItem: React.FC<TodoItemProps> = ({
         </ContextMenuContent>
       </ContextMenu>
 
-      {todo.subTasks && todo.subTasks.length > 0 ? (
-        <motion.div
-          animate={showConfetti ? 'hidden' : 'visible'}
-          variants={variants}
-        >
-          <ul className="ml-8">
-            {todo.subTasks.map((subTask) => (
-              <SubTaskItem
-                key={subTask.id}
-                todo={subTask}
-                toggleTodo={toggleTodo}
-                deleteTodo={deleteTodo}
-                renameTodo={renameTodo}
-                sortIndividualTodo={sortIndividualTodo}
-                lastTodo={subTask}
-                addSubTaskToTodo={addSubTaskToTodo}
-                setShowAddSubtask={setShowAddSubtask}
-                setAddingSubtaskParentId={setAddingSubtaskParentId}
-              />
-            ))}
-          </ul>
-        </motion.div>
-      ) : (
-        ''
-      )}
-
       {todo === lastTodo ? (
         ''
       ) : (
@@ -242,89 +204,4 @@ const TodoItem: React.FC<TodoItemProps> = ({
   );
 };
 
-interface ToDoListProps {
-  todos: Todo[];
-  toggleTodo: (id: string) => void;
-  deleteTodo: (id: string) => void;
-  renameTodo: (id: string, newName: string) => void;
-  sortIndividualTodo: (todoToSort: Todo) => void;
-  ref: React.RefObject<HTMLDivElement>;
-  searchQuery: string;
-  isSearching: boolean;
-  setShowAddSubtask: (show: boolean) => void;
-  addSubTaskToTodo: (title: string, todoId: string) => void;
-  setAddingSubtaskParentId: (id: string) => void;
-}
-
-function ToDoList({
-  todos,
-  toggleTodo,
-  deleteTodo,
-  renameTodo,
-  sortIndividualTodo,
-  ref,
-  searchQuery,
-  isSearching,
-  setShowAddSubtask,
-  addSubTaskToTodo,
-  setAddingSubtaskParentId,
-}: ToDoListProps) {
-  const todosLength = todos.length;
-  const lastTodo = todos[todosLength - 1];
-  const firstTodo = todos[0];
-
-  if (isSearching) {
-    const fuzzyTodos = todos.filter((todo) =>
-      todo.title.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
-    return (
-      <div className="mx-8 mt-2 overflow-auto shrink min-h-0 min-w-0">
-        <ul>
-          {fuzzyTodos.map((todo) =>
-            todo.completed ? null : (
-              <TodoItem
-                key={todo.id}
-                todo={todo}
-                toggleTodo={toggleTodo}
-                deleteTodo={deleteTodo}
-                renameTodo={renameTodo}
-                sortIndividualTodo={sortIndividualTodo}
-                lastTodo={lastTodo}
-                ref={todo.id === firstTodo.id ? ref : null}
-                addSubTaskToTodo={addSubTaskToTodo}
-                setShowAddSubtask={setShowAddSubtask}
-                setAddingSubtaskParentId={setAddingSubtaskParentId}
-              />
-            ),
-          )}
-        </ul>
-      </div>
-    );
-  }
-
-  return (
-    <div className="mx-8 mt-2 overflow-auto shrink min-h-0 min-w-0">
-      <ul>
-        {todos.map((todo) =>
-          todo.completed ? null : (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              toggleTodo={toggleTodo}
-              deleteTodo={deleteTodo}
-              renameTodo={renameTodo}
-              sortIndividualTodo={sortIndividualTodo}
-              lastTodo={lastTodo}
-              ref={todo.id === firstTodo.id ? ref : null}
-              addSubTaskToTodo={addSubTaskToTodo}
-              setShowAddSubtask={setShowAddSubtask}
-              setAddingSubtaskParentId={setAddingSubtaskParentId}
-            />
-          ),
-        )}
-      </ul>
-    </div>
-  );
-}
-
-export default ToDoList;
+export default SubTaskItem;

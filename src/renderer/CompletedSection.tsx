@@ -65,6 +65,13 @@ function CompletedSection({ completedTodos }: CompletedSectionProps) {
               <div key={todo.id} className="rounded-md p-2 overflow-hidden ">
                 <div className="flex flex-col  justify-start dark:text-gray-100">
                   <div>{todo.title}</div>
+                  {todo.subTasks &&
+                    todo.subTasks.map((subtask) => (
+                      <div key={subtask.id} className="flex items-center mt-2">
+                        <Dot size={24} className="mr-2" />
+                        <div>{subtask.title}</div>
+                      </div>
+                    ))}
                   <div className="text-xs  text-gray-500 mt-2 dark:text-gray-300">
                     {todo.completedAt
                       ? format(parseISO(todo.completedAt.toString()), 'p')

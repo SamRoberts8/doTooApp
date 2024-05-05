@@ -136,8 +136,35 @@ function useTodoList(initialTodos: Todo[] = []) {
     setTodoLists(updatedLists);
   };
 
-  // Function to toggle the completed status of a todo
-  const toggleTodo = (id: number) => {
+  const addSubTaskToTodo = (title: string, todoId: string) => {
+    const newSubTask: Todo = {
+      id: uuidv4(),
+      title,
+      description: 'This is a description',
+      completed: false,
+      sorted: false,
+      createdAt: new Date().toISOString,
+      completedAt: undefined,
+    };
+
+    const updatedLists = todoLists.map((list) => {
+      if (list.id === currentListId) {
+        const newTodos = list.todos.map((todo) => {
+          if (todo.id === todoId) {
+            const newSubTasks = todo.subTasks || [];
+            return { ...todo, subTasks: [...newSubTasks, newSubTask] };
+          }
+          return todo;
+        });
+        return { ...list, todos: newTodos };
+      }
+      return list;
+    });
+    setTodoLists(updatedLists);
+  };
+
+  // Function to toggle the completed status of a todo and its subtasks
+  const toggleTodo = (id: string) => {
     const updatedTodos = [...todos];
     setTodos(
       updatedTodos
@@ -148,6 +175,7 @@ function useTodoList(initialTodos: Todo[] = []) {
               updatedTodo.completedAt = new Date().toISOString();
               setCompletedTodos([updatedTodo, ...completedTodos]);
             } else {
+              updatedTodo.completedAt = undefined;
               setCompletedTodos(
                 completedTodos.filter(
                   (completedTodo) => completedTodo.id !== id,
@@ -155,6 +183,31 @@ function useTodoList(initialTodos: Todo[] = []) {
               );
             }
             return updatedTodo;
+          }
+          if (todo.subTasks?.find((subTask) => subTask.id === id)) {
+            const newSubTasks = todo.subTasks.map((subTask) => {
+              if (subTask.id === id) {
+                const updatedSubTask = {
+                  ...subTask,
+                  completed: !subTask.completed,
+                };
+                if (updatedSubTask.completed) {
+                  updatedSubTask.completedAt = new Date();
+                  todo.completedSubTasks = [
+                    ...(todo.completedSubTasks || []),
+                    updatedSubTask,
+                  ];
+                } else {
+                  updatedSubTask.completedAt = undefined;
+                  todo.completedSubTasks =
+                    todo.completedSubTasks?.filter((st) => st.id !== id) || [];
+                }
+                return updatedSubTask;
+              }
+              return subTask;
+            });
+            todo.subTasks = newSubTasks.filter((st) => !st.completed);
+            return { ...todo };
           }
           return todo;
         })
@@ -181,14 +234,49 @@ function useTodoList(initialTodos: Todo[] = []) {
 
   // Function to delete a todo
   const deleteTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id.toString()));
+    const updatedLists = todoLists.map((list) => {
+      if (list.id === currentListId) {
+        const updatedTodos = list.todos.filter((todo) => {
+          if (todo.id === id.toString()) {
+            return false;
+          }
+          if (todo.subTasks) {
+            todo.subTasks = todo.subTasks.filter(
+              (subTask) => subTask.id !== id.toString(),
+            );
+          }
+          return true;
+        });
+        return { ...list, todos: updatedTodos };
+      }
+      return list;
+    });
+    setTodoLists(updatedLists);
   };
 
   const renameTodo = (id: string, newName: string): void => {
-    const updatedTodos = [...todos];
-    const todoIndex = updatedTodos.findIndex((t) => t.id === id);
-    updatedTodos[todoIndex].title = newName;
-    setTodos(updatedTodos);
+    const updatedLists = todoLists.map((list) => {
+      if (list.id === currentListId) {
+        const updatedTodos = list.todos.map((todo) => {
+          if (todo.id === id) {
+            return { ...todo, title: newName };
+          }
+          if (todo.subTasks) {
+            const updatedSubtasks = todo.subTasks.map((subtask) => {
+              if (subtask.id === id) {
+                return { ...subtask, title: newName };
+              }
+              return subtask;
+            });
+            return { ...todo, subTasks: updatedSubtasks };
+          }
+          return todo;
+        });
+        return { ...list, todos: updatedTodos };
+      }
+      return list;
+    });
+    setTodoLists(updatedLists);
   };
 
   const sortTodo = useCallback(() => {
@@ -307,6 +395,7 @@ function useTodoList(initialTodos: Todo[] = []) {
     sortIndividualTodo,
     renameTodoList,
     deleteTodoList,
+    addSubTaskToTodo,
   };
 }
 
