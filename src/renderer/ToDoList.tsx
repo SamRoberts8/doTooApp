@@ -274,9 +274,17 @@ function ToDoList({
   const firstTodo = todos[0];
 
   if (isSearching) {
-    const fuzzyTodos = todos.filter((todo) =>
-      todo.title.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
+    const fuzzyTodos = todos.filter((todo) => {
+      if (todo.title.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return true;
+      }
+      if (todo.subTasks) {
+        return todo.subTasks.some((subTask) =>
+          subTask.title.toLowerCase().includes(searchQuery.toLowerCase()),
+        );
+      }
+      return false;
+    });
     return (
       <div className="mx-8 mt-2 overflow-auto shrink min-h-0 min-w-0">
         <ul>
